@@ -2,13 +2,19 @@
   "name": "lfor8727-tracker",
   "version": "1.0.0",
   "description": "study web app",
-  "main": "server.js",
   "scripts": {
-    "start": "node server.js"
+    "start": "node server.js",
+    "prestart": "parcel build public/index.html",
+    "dev": "parcel serve public/index.html"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "express": "^4.18.2"
+    "express": "^4.18.2",
+    "sass": "^1.62.0"
+  },
+  "devDependencies": {
+    "@parcel/transformer-sass": "^2.8.3",
+    "parcel": "^2.8.3"
   }
 }
