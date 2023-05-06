@@ -6,7 +6,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="main.scss">
-    <title>Document</title>
+    <title>Movie Review Tracker</title>
 </head>
 
 <body>
@@ -17,27 +17,99 @@
             <a>Watch List</a>
         </nav>
     </header>
-        <section>
-            <h1>Based on What You've Reviewed</h1>
-            <div class="card-container">
-                <div class="card"></div>
-                <div class="card"></div>
-                <div class="card"></div>
-                <div class="card"></div>
-                <div class="card"></div>
-            </div>
-        </section>
-        <section>
-            <h1>Recent Reviews</h1>
-            <a>See All</a>
-            <div class="card-container">
-                <div class="card"></div>
-                <div class="card"></div>
-                <div class="card"></div>
-                <div class="card"></div>
-                <div class="card"></div>
-            </div>
-    </div>
-</body>
 
+    <!-- toggleable movie details page where user can read about movie and write review -->
+    <section id="moviePage">
+        <div>
+            <h1>Movie Title</h1>
+            <p>Year, Genre</p>
+        </div>
+
+        <!-- could just be a img tag but nesting inside a button has better semantics -->
+        <button id="moviePageExitButton">
+            <img src="vectors/cross.svg">
+        </button>
+
+        <div class="movie-page-container">
+            <img src="images/poster_na.jpg" alt="TODO" class="poster">
+
+            <div class="movie-information">
+                <div class="details-container">
+                    <div class="details">
+                        <h2>Synopsis</h2>
+                        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Labore, est molestias. Voluptatum
+                            dolorem, dolor
+                            consequatur sequi doloremque ex nobis incidunt ut placeat eveniet quasi, quisquam reiciendis
+                            vero, quia
+                            corporis repudiandae.</p>
+                    </div>
+                    <div class="details">
+                        <h2>Details</h2>
+                        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Labore, est molestias. Voluptatum
+                            dolorem, dolor
+                            consequatur sequi doloremque ex nobis incidunt ut placeat eveniet quasi, quisquam reiciendis
+                            vero, quia
+                            corporis repudiandae.</p>
+                    </div>
+                    <div class="details">
+                        <h2>Cast</h2>
+                        <ul>
+                            <li>Lorem Ipsum</li>
+                            <li>Lorem Ipsum</li>
+                            <li>Lorem Ipsum</li>
+                            <li>Lorem Ipsum</li>
+                            <li>Lorem Ipsum</li>
+                            <li>Lorem Ipsum</li>
+                            <li>Lorem Ipsum</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <form class="review-form">
+                    <label for="text-review"><h2>Write Review</h2></label><br>
+                    <textarea name="text-review" id="text-review" rows="10"></textarea>
+                    <br>
+                    <input type="range" name="cinematography-stars" id="cinematography-stars" min="1" max="5" step="1">
+                    <label for="cinematography-stars">Cinematography</label>
+                    <br>
+                    <input type="range" name="story-stars" id="story-stars" min="1" max="5" step="1">
+                    <label for="story-stars">Story</label>
+                    <br>
+                    <input type="range" name="effects-stars" id="effects-stars" min="1" max="5" step="1">
+                    <label for="effects-stars">Effects</label>
+                    <br>
+                    <label for="watch-date-stars">Watch Date</label>
+                    <input type="date" name="watch-date-stars" id="watch-date-stars">
+                    <br>
+                    <input type="submit" value="Add Review">
+                </form>
+            </div>
+        </div>
+
+
+    </section>
+
+    <section>
+        <h1>Based on What You've Reviewed</h1>
+        <div class="card-container">
+            <div class="card"></div>
+            <div class="card"></div>
+            <div class="card"></div>
+            <div class="card"></div>
+            <div class="card"></div>
+        </div>
+    </section>
+    <section>
+        <h1>Recent Reviews</h1>
+        <a>See All</a>
+        <div class="card-container">
+            <div class="card"></div>
+            <div class="card"></div>
+            <div class="card"></div>
+            <div class="card"></div>
+            <div class="card"></div>
+        </div>
+        </div>
+</body>
+<script src="script.js" type="module"></script>
 </html>
