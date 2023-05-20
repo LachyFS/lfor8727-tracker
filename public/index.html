@@ -5,6 +5,12 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- google font imports -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap"
+        rel="stylesheet">
+    <!-- styling -->
     <link rel="stylesheet" href="main.scss">
     <title>Movie Review Tracker</title>
 </head>
@@ -12,6 +18,12 @@
 <body>
     <header>
         <nav>
+            <div id="searchContainer">
+                <input id="searchFilmsInput" type="text" placeholder="Search Films...">
+                <button id="addMovieButton">
+                    <img src="vectors/plus.svg">
+                </button>
+            </div>
             <a>Movies</a>
             <a>Reviews</a>
             <a>Watch List</a>
@@ -19,20 +31,20 @@
     </header>
 
     <!-- toggleable movie details page where user can read about movie and write review -->
-    <section id="moviePage">
-        <div>
-            <h1>Movie Title</h1>
-            <p>Year, Genre</p>
-        </div>
-
-        <!-- could just be a img tag but nesting inside a button has better semantics -->
-        <button id="moviePageExitButton">
-            <img src="vectors/cross.svg">
-        </button>
+    <section id="movieDetailsPage" class="hide">
+        <header>
+            <div class="movie-title-container">
+                <h1>Movie Title</h1>
+                <p>Year, Genre</p>
+            </div>
+            <!-- could just be a img tag but nesting inside a button has better semantics -->
+            <button id="moviePageExitButton" class="exit-button">
+                <img src="vectors/cross.svg">
+            </button>
+        </header>
 
         <div class="movie-page-container">
-            <img src="images/poster_na.jpg" alt="TODO" class="poster">
-
+            <img id="detailsPoster" src="images/poster_na.jpg">
             <div class="movie-information">
                 <div class="details-container">
                     <div class="details">
@@ -66,7 +78,9 @@
                 </div>
 
                 <form class="review-form">
-                    <label for="text-review"><h2>Write Review</h2></label><br>
+                    <label for="text-review">
+                        <h2>Write Review</h2>
+                    </label><br>
                     <textarea name="text-review" id="text-review" rows="10"></textarea>
                     <br>
                     <input type="range" name="cinematography-stars" id="cinematography-stars" min="1" max="5" step="1">
@@ -85,31 +99,97 @@
                 </form>
             </div>
         </div>
-
-
     </section>
 
-    <section>
-        <h1>Based on What You've Reviewed</h1>
-        <div class="card-container">
-            <div class="card"></div>
-            <div class="card"></div>
-            <div class="card"></div>
-            <div class="card"></div>
-            <div class="card"></div>
+    <!-- toggleable movie details page where user can read about movie and write review -->
+    <section id="movieAddPage" class="hide">
+        
+        <button id="movieAddPageExitButton" class="exit-button">
+            <img src="vectors/cross.svg">
+        </button>
+        
+        <div class="flex-grid">
+            <div class="upload-image-area">
+                <div>
+                    <!-- while this could be an <img> tag, an <object> tag allows for manipulations in css -->
+                    <object data="./vectors/folder.svg" type="image/svg+xml"></object>
+                    <p>Drop poster image or <a>browse</a></p>
+                </div>
+            </div>
+
+            <form class="review-form">
+                <br>
+                <input type="text" class="big-text-input" name="add-movie-name" id="add-movie-name"
+                    placeholder="Movie Name">
+
+                <br>
+                <div class="input-multi" id="add-movie-directed-by">
+                    <label for="add-movie-directed-by">Directed By</label>
+                    <input type="text" name="add-movie-directed-by" placeholder="Director Name">
+                </div>
+
+                <br>
+                <label for="add-movie-release-date">Release Date</label>
+                <input type="date" name="add-movie-release-date" id="add-movie-release-date">
+
+                <br>
+                <label for="add-movie-duration">Duration (Mins)</label>
+                <input type="text" name="add-movie-duration" id="add-movie-duration">
+
+                <br>
+                <div class="input-multi" id="add-movie-genres">
+                    <label for="add-movie-genres">Genres</label>
+                    <input type="text" name="add-movie-genres" placeholder="Genre">
+                </div>
+
+                <br>
+                <label for="add-movie-budget">Budget</label>
+                <input type="text" name="add-movie-budget" id="add-movie-budget">
+
+                <br>
+                <label for="add-movie-box-office">Box Office</label>
+                <input type="text" name="add-movie-box-office" id="add-movie-box-office">
+
+                <br>
+                <div class="input-multi" id="add-movie-countries">
+                    <label for="add-movie-countries">Country</label>
+                    <input type="text" name="add-movie-countries">
+                </div>
+
+                <br>
+                <div class="input-multi" id="add-movie-cast">
+                    <label for="add-movie-cast">Starring Cast</label>
+                    <input type="text" name="add-movie-cast">
+                </div>
+
+                <br>
+                <label for="add-movie-colour">Colour</label>
+                <input type="text" name="add-movie-colour" id="add-movie-colour">
+                <input type="color" name="add-movie-colour" id="add-movie-colour">
+
+
+                <br>
+                <label for="add-movie-synopsis">Synopsis</label>
+                <textarea name="add-movie-synopsis" id="add-movie-synopsis" rows="10"></textarea>
+
+                <input type="submit" value="Add Movie">
+            </form>
         </div>
     </section>
-    <section>
-        <h1>Recent Reviews</h1>
-        <a>See All</a>
-        <div class="card-container">
-            <div class="card"></div>
-            <div class="card"></div>
-            <div class="card"></div>
-            <div class="card"></div>
-            <div class="card"></div>
-        </div>
-        </div>
+
+    <div id="mainPage">
+        <section>
+            <h1 class="cards-title">Based on What You've Reviewed</h1>
+            <div class="card-container">
+                <div class="card"></div>
+                <div class="card"></div>
+                <div class="card"></div>
+                <div class="card"></div>
+                <div class="card"></div>
+            </div>
+        </section>
+    </div>
 </body>
 <script src="script.js" type="module"></script>
+
 </html>
