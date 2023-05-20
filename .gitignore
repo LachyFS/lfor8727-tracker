@@ -1,4 +1,4 @@
-# parcel cache
+# ignore anything in parcel cache folder
 .parcel-cache/
 
 # Logs
