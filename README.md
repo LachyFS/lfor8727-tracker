@@ -1,7 +1,7 @@
-# lfor8727-tracker
+# Movie Tracker
 
 
-
+<!-- (table might look a bit strange if not rendered in markdown) -->
 ## Package Dependencies
 | Package  | Version | Purpose |
 | -------- | ------- | --------|
