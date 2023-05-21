@@ -18,13 +18,13 @@
 <body>
     <header>
         <nav>
-            <div id="searchContainer">
+            <div class="search-container">
                 <input id="searchFilmsInput" type="text" placeholder="Search Films...">
                 <button id="addMovieButton">
                     <img src="vectors/plus.svg">
                 </button>
             </div>
-            <a>Movies</a>
+            <a class="selected">Movies</a>
             <a>Reviews</a>
             <a>Watch List</a>
         </nav>
@@ -103,11 +103,11 @@
 
     <!-- toggleable movie details page where user can read about movie and write review -->
     <section id="movieAddPage" class="hide">
-        
+
         <button id="movieAddPageExitButton" class="exit-button">
             <img src="vectors/cross.svg">
         </button>
-        
+
         <div class="flex-grid">
             <div class="upload-image-area">
                 <div>
@@ -118,10 +118,9 @@
             </div>
 
             <form class="review-form">
-                <br>
-                <input type="text" class="big-text-input" name="add-movie-name" id="add-movie-name"
-                    placeholder="Movie Name">
 
+                <input type="text" class="big-text-input" name="add-movie-name" id="add-movie-name"
+                    placeholder="Movie Name" spellcheck="true">
                 <br>
                 <div class="input-multi" id="add-movie-directed-by">
                     <label for="add-movie-directed-by">Directed By</label>
@@ -139,41 +138,43 @@
                 <br>
                 <div class="input-multi" id="add-movie-genres">
                     <label for="add-movie-genres">Genres</label>
-                    <input type="text" name="add-movie-genres" placeholder="Genre">
+                    <input list="movie-genres-list" name="add-movie-duration" id="add-movie-duration">
+                    <datalist id="movie-genres-list">
+                        <option value=""></option>
+                    </datalist>
                 </div>
+        </div>
 
-                <br>
-                <label for="add-movie-budget">Budget</label>
-                <input type="text" name="add-movie-budget" id="add-movie-budget">
+        <br>
+        <label for="add-movie-budget">Budget</label>
+        <input type="text" name="add-movie-budget" id="add-movie-budget">
 
-                <br>
-                <label for="add-movie-box-office">Box Office</label>
-                <input type="text" name="add-movie-box-office" id="add-movie-box-office">
+        <br>
+        <label for="add-movie-box-office">Box Office</label>
+        <input type="text" name="add-movie-box-office" id="add-movie-box-office">
 
-                <br>
-                <div class="input-multi" id="add-movie-countries">
-                    <label for="add-movie-countries">Country</label>
-                    <input type="text" name="add-movie-countries">
-                </div>
+        <br>
+        <div class="input-multi" id="add-movie-countries">
+            <label for="add-movie-countries">Country</label>
+            <input type="text" name="add-movie-countries">
+        </div>
 
-                <br>
-                <div class="input-multi" id="add-movie-cast">
-                    <label for="add-movie-cast">Starring Cast</label>
-                    <input type="text" name="add-movie-cast">
-                </div>
+        <br>
+        <div class="input-multi" id="add-movie-cast">
+            <label for="add-movie-cast">Starring Cast</label>
+            <input type="text" name="add-movie-cast">
+        </div>
 
-                <br>
-                <label for="add-movie-colour">Colour</label>
-                <input type="text" name="add-movie-colour" id="add-movie-colour">
-                <input type="color" name="add-movie-colour" id="add-movie-colour">
+        <br>
+        <label for="add-movie-colour">Colour</label>
+        <input type="text" name="add-movie-colour" id="add-movie-colour">
+        <input type="color" name="add-movie-colour" id="add-movie-colour">
+        <br>
+        <label for="add-movie-synopsis">Synopsis</label>
+        <textarea name="add-movie-synopsis" id="add-movie-synopsis" rows="10"></textarea>
 
-
-                <br>
-                <label for="add-movie-synopsis">Synopsis</label>
-                <textarea name="add-movie-synopsis" id="add-movie-synopsis" rows="10"></textarea>
-
-                <input type="submit" value="Add Movie">
-            </form>
+        <input type="submit" value="Add Movie">
+        </form>
         </div>
     </section>
 
