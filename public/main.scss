@@ -25,13 +25,13 @@ h1 {
     margin-left: 1em;
 }
 
-body > header {
+body>header {
     background-color: $main-background-col;
     color: $main-text-col;
 
     // make header overlay everything with a high z index 
     z-index: 5;
-    
+
     nav {
         display: flex;
         justify-content: flex-end;
@@ -46,18 +46,19 @@ body > header {
     }
 }
 
-.selected{
+.selected {
     text-decoration: underline;
 }
 
-.search-container{
+.search-container {
     margin-left: 1em;
     margin-right: auto;
 }
 
 
 section {
-    margin: 0em 0em;
+    margin: 0 auto;
+    width: 95%;
 }
 
 // TODO: This likely doesnt work on firefox!!
@@ -109,10 +110,8 @@ section {
 
 #movieDetailsPage {
     color: $main-text-col;
-    width: 90%;
     padding: 2em;
     border-radius: $border-rad;
-    margin: auto;
 
     z-index: 2;
     opacity: 0;
@@ -130,7 +129,7 @@ section {
         padding: 1em;
     }
 
-    header > button {
+    header>button {
         margin-left: auto;
     }
 
@@ -215,7 +214,7 @@ textarea {
     border: 3px dashed $main-mid-color;
     border-radius: 25px;
     background-color: $alt-background-col;
-    
+
     div {
         color: $main-mid-color;
         text-align: center;
@@ -260,16 +259,20 @@ input {
 }
 
 input[type=date] {
-    @extend .input-generic
+    @extend .input-generic;
+
+    &::-webkit-calendar-picker-indicator {
+        // make date selection white by inverting it
+        filter: invert(100%);
+    }
 }
 
 input[type=text] {
-    @extend .input-generic
+    @extend .input-generic;
 }
 
-input[type=range] {
-    
-}
+input[type=range] {}
+
 
 .big-text-input {
     font-size: large !important; // override
