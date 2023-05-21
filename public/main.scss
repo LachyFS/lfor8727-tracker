@@ -3,8 +3,10 @@ $main-text-col: rgb(237, 237, 237); // main background colour
 $main-mid-color: #CBCBCB;
 $main-background-col: #0A0A0A; // main background colour
 $alt-background-col: #101010; // lighter colour to main background colour to highlight information   
-$input-border-col: #2B2B2B;
 $border-rad: 16px;
+
+$input-border-col: #2B2B2B;
+$input-font-size: 16px;
 
 // global fonts
 $body-font-family: 'Inter', Arial, Helvetica, sans-serif;
@@ -23,23 +25,36 @@ h1 {
     margin-left: 1em;
 }
 
-body>header {
+body > header {
     background-color: $main-background-col;
     color: $main-text-col;
 
     // make header overlay everything with a high z index 
     z-index: 5;
-
+    
     nav {
         display: flex;
         justify-content: flex-end;
 
         a {
             display: inline-block;
-            margin: 1em;
+            margin: 1em 3em;
+            font-size: 1.5em;
+            font-weight: bold;
+            cursor: pointer;
         }
     }
 }
+
+.selected{
+    text-decoration: underline;
+}
+
+.search-container{
+    margin-left: 1em;
+    margin-right: auto;
+}
+
 
 section {
     margin: 0em 0em;
@@ -97,11 +112,12 @@ section {
     width: 90%;
     padding: 2em;
     border-radius: $border-rad;
+    margin: auto;
 
     z-index: 2;
     opacity: 0;
 
-    .review-form {
+    .review- {
         background-color: $alt-background-col;
     }
 
@@ -114,7 +130,7 @@ section {
         padding: 1em;
     }
 
-    header>button {
+    header > button {
         margin-left: auto;
     }
 
@@ -159,7 +175,7 @@ textarea {
     color: $main-text-col;
     font-family: $body-font-family;
     width: 100%;
-    margin: 2em;
+    font-size: $input-font-size;
 
     // reset
     resize: none;
@@ -168,13 +184,13 @@ textarea {
 }
 
 .button {
-    border: 2px solid;
     background-color: $main-text-col;
     color: $main-background-col;
     padding: 1em 2em;
     font-weight: 700;
     font-size: 1em;
     border-radius: 20px;
+    cursor: pointer;
     transition: color, background-color 100ms;
 }
 
@@ -182,18 +198,9 @@ textarea {
     border: 2px solid $input-border-col;
     background-color: $alt-background-col;
     color: $main-text-col;
-    cursor: pointer;
+    border: $main-mid-color solid 1px !important;
 }
 
-.input-generic {
-    background-color: $alt-background-col;
-    border: 2px solid $input-border-col;
-    background-color: $alt-background-col;
-    border-radius: $border-rad;
-    padding: 0.5em 2em;
-    color: $main-text-col;
-    font-family: $body-font-family;
-}
 
 // generic grid class to align elements next to each other
 .flex-grid {
@@ -208,7 +215,7 @@ textarea {
     border: 3px dashed $main-mid-color;
     border-radius: 25px;
     background-color: $alt-background-col;
-
+    
     div {
         color: $main-mid-color;
         text-align: center;
@@ -227,8 +234,19 @@ textarea {
 }
 
 form {
-    margin: 1em;
-    width: 50%;
+    width: 100%;
+}
+
+.input-generic {
+    background-color: $alt-background-col;
+    border: 2px solid $input-border-col;
+    background-color: $alt-background-col;
+    border-radius: $border-rad;
+    padding: 0.5em 2em;
+    color: $main-text-col;
+
+    font-family: $body-font-family;
+    font-size: $input-font-size;
 }
 
 input {
@@ -249,12 +267,16 @@ input[type=text] {
     @extend .input-generic
 }
 
-.big-text-input {
-    font-size: large;
-    width: 100%;
-    margin: -1em 0 1em 0;
+input[type=range] {
+    
 }
 
+.big-text-input {
+    font-size: large !important; // override
+    width: 100%;
+    margin: -1em 0 1em 0;
+    font-weight: bold;
+}
 
 .input-multi {
     display: flex;
@@ -290,15 +312,20 @@ input[type=text] {
     }
 }
 
-
 input[type=submit] {
     // use of scss inheritance implements existing properties of the base button class  
-    @extend .button
+    @extend .button;
+    margin: 0;
+    box-sizing: content-box;
+
 }
 
 #searchFilmsInput {
-    border-radius: $border-rad;
+    background-color: white;
+    border-radius: 5em;
     padding: 0.5em;
+    width: 25vw;
+    color: black;
 }
 
 #addMovieButton {
@@ -323,9 +350,6 @@ input[type=submit] {
         background-color: $input-border-col;
     }
 }
-
-
-
 
 label {
     font-size: 16px;
