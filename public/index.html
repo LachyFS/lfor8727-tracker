@@ -122,7 +122,8 @@
                 <input type="text" class="big-text-input" name="add-movie-name" id="add-movie-name"
                     placeholder="Movie Name" spellcheck="true">
                 <br>
-                <div class="input-multi" id="add-movie-directed-by">
+
+                <div class="input-multi" max="5" id="add-movie-directed-by">
                     <label for="add-movie-directed-by">Directed By</label>
                     <input type="text" name="add-movie-directed-by" placeholder="Director Name">
                 </div>
@@ -134,14 +135,12 @@
                 <br>
                 <label for="add-movie-duration">Duration (Mins)</label>
                 <input type="text" name="add-movie-duration" id="add-movie-duration">
+                <label for="add-movie-duration">Minutes</label>
 
                 <br>
                 <div class="input-multi" id="add-movie-genres">
                     <label for="add-movie-genres">Genres</label>
-                    <input list="movie-genres-list" name="add-movie-duration" id="add-movie-duration">
-                    <datalist id="movie-genres-list">
-                        <option value=""></option>
-                    </datalist>
+                    <input list="genresList" name="add-movie-genres" id="add-movie-genre">
                 </div>
         </div>
 
@@ -190,6 +189,6 @@
     </section>
 </body>
 <script src="script.js" type="module"></script>
-<script src="MultiFieldInput.js" type="module"></script>
+<!-- <script src="MultiFieldInput.js" type="module"></script> -->
 
 </html>

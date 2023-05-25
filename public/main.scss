@@ -283,6 +283,7 @@ input[type=range] {}
 
 .input-multi {
     display: flex;
+    align-items: center;
     flex-wrap: wrap;
     column-gap: 1em;
     row-gap: 1em;
@@ -334,7 +335,7 @@ input[type=submit] {
 #addMovieButton {
     border-radius: 100px;
     cursor: pointer;
-    background-color: rgba(0, 0, 0, 0);
+    background-color: transparent;
     color: white;
     border: white 1px solid;
     padding: 0.5em;
@@ -361,7 +362,7 @@ label {
 }
 
 .exit-button {
-    background-color: rgba(0, 0, 0, 0);
+    background-color: transparent;
     border: none;
     cursor: pointer;
 }
