@@ -1,4 +1,5 @@
 import anime, { easings, stagger } from "animejs";
+import { MultiSelectField } from "./MultiFieldInput.js"
 
 const movieDetailsPage = document.querySelector('#movieDetailsPage');
 
@@ -28,7 +29,6 @@ function hidePage(pageElement, duration) {
             pageElement.style.display = 'none';
         }
     });
-
 }
 
 function showPage(pageElement, duration) {
@@ -100,6 +100,22 @@ document.addEventListener('keydown', (event) => {
 // }
 // setInterval(test, 1000);
 
+movieGenres = ["Drama", "Comedy", "Action", "Fantasy", "Horror", "Romance", "Western", "Thriller"]
+
+function createDataList(id, optionValues){
+    const dataList = document.createElement("datalist");
+    dataList.id = id;
+    optionValues.forEach((value) => {
+        const option = document.createElement("option");
+        option.value = value;
+        dataList.append(option);
+    });
+    return dataList;
+}
+
+const genreDataList = createDataList("genresList", movieGenres);
+document.querySelector("#add-movie-genre").append(genreDataList);
+
 class Movie {
 
     constructor(name, image, directors, releaseDate, duration, genres, budget, boxOffice, countries, cast, colour, synopsis) {
@@ -117,3 +133,6 @@ class Movie {
         this.synopsis = synopsis;
     }
 }
+
+const multiSelectFields = document.querySelectorAll(".input-multi");
+multiSelectFields.forEach((element) => new MultiSelectField(element));

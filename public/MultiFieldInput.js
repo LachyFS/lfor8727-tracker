@@ -1,131 +1,140 @@
-import { errorShakeAnimation } from './animations.js'
+import { errorShakeAnimation } from './animations.js';
+import { setCaretPosition } from './Util.js'
 import anime from 'animejs';
 
-const MULTI_SELECT_INPUT_MAX_FIELDS = 10;
+export class MultiSelectField {
+    
+    static DEFAULT_MAX_FIELDS = 10;
 
-const multiSelectFields = document.querySelectorAll(".input-multi");
+    constructor(containerElement) {
+        this.containerElem = containerElement;
+        const containedInputs = this.containerElem.querySelector("input");
 
-multiSelectFields.forEach((element) => {
+        // if no contained inputs
+        if (!containedInputs) {
+            throw new Error("Multi select field is missing a template input field.")
+        } else if (containedInputs.length > 1) {
 
-    const lastInputElem = element.querySelector("input:last-of-type");
+            // Should only contain 1 input element to clone, if multiple we just clone the first one
+            console.warn("Multi select fields should have only 1 template input.")
+        }
+        let maxInputs = this.containerElem.getAttribute("max");
+        this.maxInputs = maxInputs == null ? MultiSelectField.DEFAULT_MAX_FIELDS : maxInputs;
 
-    const addButton = document.createElement("Button");
-    addButton.textContent = "+";
-    addButton.name = element.id;
-    addButton.classList.add('add-field-button')
-    element.append(addButton);
+        this.addButton = this.createButton();
 
-    // Getting data attributes 
-    // LINK: https://developer.mozilla.org/en-US/docs/Web/API/Element/getAttribute
-    let maxInputs = element.getAttribute("data-max");
-    // if its null, use the default max inputs
-    maxInputs = maxInputs == null ? MULTI_SELECT_INPUT_MAX_FIELDS : maxInputs;
+        this.addKeyboardEventListener();
+    }
 
-    addButton.addEventListener("click", (event) => {
-        event.preventDefault();
+    createButton() {
+        const addButton = document.createElement("Button");
+        addButton.textContent = "+";
+        addButton.name = this.containerElem.id;
+        addButton.classList.add('add-field-button');
+        this.containerElem.append(addButton);
 
-        if (element.querySelectorAll("input").length >= maxInputs) {
-            // max field animation to indicate to the user they cant add any more
-            errorShakeAnimation(element.querySelector("input:last-of-type"));
+        // button event listen for adding a new field entry
+        addButton.addEventListener("click", (event) => {
+            event.preventDefault();
+            this.TryAddNewInputField();
+        });
+        return addButton;
+    }
+
+    addKeyboardEventListener() {
+        document.addEventListener("keydown", (event) => {
+            if (event.key == 'Backspace') {
+                const selectedInput = this.getCurrentlySelectedInput();
+                if (selectedInput && (selectedInput.value.length == 0 || selectedInput.selectionStart == 0)) {
+                    if (this.getInputFields().length > 1) {
+                        this.removeInput(selectedInput);
+                        this.setCaretPosition(this.getLastInputField(), 0);
+                    } else {
+                        errorShakeAnimation(this.containerElem.querySelector("input"));
+                    }
+                }
+            } else if (event.key == 'ArrowLeft') {
+                const selectedInput = this.getCurrentlySelectedInput();
+                if (selectedInput && this.containerElem && (selectedInput.selectionStart == 0)) {
+                    this.setCaretPosition(selectedInput.previousElementSibling, 0);
+                }
+            } else if (event.key == 'ArrowRight') {
+                const selectedInput = this.getCurrentlySelectedInput();
+                if (selectedInput && this.containerElem && (selectedInput.selectionStart == selectedInput.value.length)) {
+                    if (selectedInput != this.containerElem.querySelector("input:last-of-type")) {
+                        this.setCaretPosition(selectedInput.nextElementSibling, 0);
+                    }
+                }
+            } else if (event.key == 'Enter') {
+                if (this.getCurrentlySelectedInput()) {
+                    this.TryAddNewInputField();
+                }
+            }
+        });
+    }
+
+    removeInput(selectedInput) {
+        selectedInput.remove();
+        if (this.getInputFields().length < this.maxInputs){
+            this.addButton.style.display = '';
+        }
+    }
+
+    getInputFields() {
+        return this.containerElem.querySelectorAll("input");
+    }
+
+    TryAddNewInputField() {
+        const lastInputElem = this.getLastInputField();
+
+        let inputCount = this.containerElem.querySelectorAll("input").length;
+        if (inputCount >= this.maxInputs) {
+            errorShakeAnimation(lastInputElem);
             return;
         }
 
         const clone = lastInputElem.cloneNode();
-        clone.value = "" // reset value
-        element.insertBefore(clone, addButton);
+        clone.value = "";
+        this.containerElem.insertBefore(clone, this.addButton);
+        inputCount++;
 
         anime({
             targets: clone,
             width: ["0", "200px"],
-        })
+        });
 
-        // set selection caret to new element
-        setCaretPosition(clone, 0)
-    });
-});
+        this.setCaretPosition(clone, 0);
 
-document.addEventListener("keydown", (event) => {
-    // delete handling for when user presses backspace on a multi input field while editing it
-    // this logic could be a bit cleaner with a switch statement but switch cases don't create new block scopes
-    if (event.key == 'Backspace') {
-        const { selectedInput, MultiInputContainer } = getSelectedMultiInputSelect();
-        if (selectedInput
-            && MultiInputContainer
-            && (selectedInput.value.length == 0 || selectedInput.selectionStart == 0)) {
-
-            if (MultiInputContainer.querySelectorAll("input").length > 1) {
-                // delete the input element
-                selectedInput.remove();
-                // move selection caret backwards 
-                setCaretPosition(MultiInputContainer.querySelector("input:last-of-type"), 0);
-            } else{
-                // display shake animation when you try to delete the last remaining input 
-                errorShakeAnimation(MultiInputContainer.querySelector("input"));
-            }
-        }
-    } else if (event.key == 'ArrowLeft') {
-        const { selectedInput, MultiInputContainer } = getSelectedMultiInputSelect();
-        if (selectedInput
-            && MultiInputContainer
-            && (selectedInput.selectionStart == 0)) {
-            if (selectedInput != MultiInputContainer.querySelector("input")) {
-                if (selectedInput.previousElementSibling.nodeName == 'INPUT') {
-                    // move to previous input
-                    setCaretPosition(selectedInput.previousElementSibling, 0)
-                }
-            }
-        }
-    } else if (event.key == 'ArrowRight') {
-        const { selectedInput, MultiInputContainer } = getSelectedMultiInputSelect();
-        console.log(selectedInput.selectionStart);
-        if (selectedInput
-            && MultiInputContainer
-            && (selectedInput.selectionStart == selectedInput.value.length)) {
-            console.log("moive");
-            if (selectedInput != MultiInputContainer.querySelector("input:last-of-type")) {
-                if (selectedInput.nextElementSibling.nodeName == 'INPUT') {
-                    // move to next input
-                    setCaretPosition(selectedInput.nextElementSibling, 0)
-                }
-            }
+        console.log(inputCount);
+        // hide plus if reached the max number of inputs
+        if (inputCount >= this.maxInputs){
+            this.hideButton();
         }
     }
-});
 
-function getSelectedMultiInputSelect() {
-    if (document.activeElement // make sure something is selected
-        && document.activeElement.parentElement) { // makes sures parent exists
+    hideButton(){
+        this.addButton.style.display = 'none';
+    }
+    
+    showButton(){
+        this.addButton.style.display = '';
+    }
 
+    getCurrentlySelectedInput() {
+        // return selected 
         const selected = document.activeElement;
         const parent = document.activeElement.parentElement;
-
-        if (
-            parent.classList.contains("input-multi") // make sure its inside a multi-select element
-            && selected.nodeName == 'INPUT' // make sure its an input node
-        ) {
-            return { selectedInput: selected, MultiInputContainer: parent };
+        if (selected
+            && parent
+            && parent == this.containerElem
+            && selected.nodeName == 'INPUT') {
+            return selected;
+        } else {
+            return null
         }
     }
-    return { selectedInput: null, MultiInputContainer: null };
-}
 
-// Simple function which sets the caret position and focused element
-// CITE: Slightly modified version of (Josh Stodola, 2007) "Setting Cursor Position in a Textbox or TextArea with Javascript"
-// LINK: https://web.archive.org/web/20090210030453/http://blog.josh420.com/archives/2007/10/setting-cursor-position-in-a-textbox-or-textarea-with-javascript.aspx
-function setCaretPosition(elem, caretPos) {
-    if (elem != null) {
-        if (elem.createTextRange) {
-            var range = elem.createTextRange();
-            range.move('character', caretPos);
-            range.select();
-        }
-        else {
-            if (elem.selectionStart) {
-                elem.focus();
-                elem.setSelectionRange(caretPos, caretPos);
-            }
-            else
-                elem.focus();
-        }
+    getLastInputField() {
+        return this.containerElem.querySelector("input:last-of-type");
     }
 }
