@@ -236,6 +236,10 @@ form {
     width: 100%;
 }
 
+@mixin focus-effect{
+    outline: 1px solid white;
+}
+
 .input-generic {
     background-color: $alt-background-col;
     border: 2px solid $input-border-col;
@@ -243,19 +247,19 @@ form {
     border-radius: $border-rad;
     padding: 0.5em 2em;
     color: $main-text-col;
+    height: 2em;
+    margin: 1em;
 
     font-family: $body-font-family;
     font-size: $input-font-size;
 }
 
-input {
-    margin: 1em;
-    border: none;
-}
-
-input {
-    border: none !important;
-    height: 2em;
+br{
+    font-size: 0;
+    width: 0;
+    height: 0;
+    margin: 0;
+    padding: 0;
 }
 
 input[type=date] {
@@ -270,9 +274,6 @@ input[type=date] {
 input[type=text] {
     @extend .input-generic;
 }
-
-input[type=range] {}
-
 
 .big-text-input {
     font-size: large !important; // override
@@ -290,16 +291,40 @@ input[type=range] {}
     margin: 1em;
     width: 100%;
 
-    input {
-        margin: 0 0 0 0;
-        height: 2em;
+    padding: 2em;
+    background-color: rgba(0,0,0, 0.2);
+    border-radius: $border-rad;
 
-        &:hover {
-            background-color: #161616;
+    div {
+        align-items: center;
+        display: inline-flex;
+        gap: 0em;
+        background-color: $alt-background-col;
+        border-radius: $border-rad;
+
+        &:focus-within{
+            @include focus-effect;
+        }
+
+        input {
+            background-color: transparent;
+            border: none;
+            margin: 0;
+            width: 100%;
+            outline-style: none; // disable focus outline 
+        }
+
+        img {
+            color: $input-border-col;
+            font-weight: bold;
+            font-size: 1em;
+            width: 1em;
+            margin: 1em;
+            cursor: pointer;
         }
     }
 
-    button {
+    > button {
         color: white;
         border: none;
         width: 3em;
@@ -314,6 +339,10 @@ input[type=range] {}
             color: $alt-background-col;
         }
     }
+}
+
+.input-multi > div > input:focus ~ .input-multi > div{
+    background-color: red;
 }
 
 input[type=submit] {
