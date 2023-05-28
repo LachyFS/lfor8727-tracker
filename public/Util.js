@@ -1,4 +1,4 @@
-// Reusable tility functions for browsers
+// Reusable utility functions for browsers
 
 // CITE: (Joshua Stodola, 2007) Setting Cursor Position in a Textbox or TextArea with Javascript
 // LINK: https://web.archive.org/web/20090210030453/http://blog.josh420.com/archives/2007/10/setting-cursor-position-in-a-textbox-or-textarea-with-javascript.aspx
