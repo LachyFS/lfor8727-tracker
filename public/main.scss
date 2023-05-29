@@ -12,7 +12,6 @@ $input-font-size: 16px;
 $input-hover-col: #161616;
 $field-height: 2em;
 
-
 // global fonts
 $body-font-family: 'Inter', Arial, Helvetica, sans-serif;
 
@@ -37,18 +36,30 @@ body>header {
     // make header overlay everything with a high z index 
     z-index: 5;
 
+    display: flex;
+
     nav {
         display: flex;
-        justify-content: flex-end;
+        align-items: center;
+        gap: 5em;
+        margin-right: 2em;
 
-        a {
-            display: inline-block;
-            margin: 1em 3em;
-            font-size: 1.5em;
-            font-weight: bold;
+        div{
+            display: flex;
+            align-items: center;
+            column-gap: 1em;
+            height: 100%;
             cursor: pointer;
+
+            a {
+                display: inline-block;
+                font-size: 1.5em;
+                font-weight: bold;
+            }
         }
+
     }
+
 }
 
 .selected {
@@ -130,6 +141,33 @@ section {
         flex: 0 0 $card-width;
         transition: height 120ms, flex 120ms;
         cursor: pointer;
+
+        .card-info {
+            display: block;
+            flex-direction: column;
+            margin: 0;
+            padding-left: 1em;
+            padding-right: 1em;
+            color: $main-text-col;
+            opacity: 0;
+            transition: opacity 250ms;
+
+            .card-footer {
+                .card-year {
+                    font-weight: bold;
+                }
+
+                margin-top: 100%;
+                margin-bottom: 0;
+            }
+
+        }
+
+        &:hover {
+            .card-info {
+                opacity: 1;
+            }
+        }
     }
 
     .card:hover {
@@ -206,10 +244,10 @@ section {
         table {
             width: 100%;
             // border-spacing: 1.5em 0.5em;
-            
-            tr{
+
+            tr {
                 height: 3em;
-                
+
                 td:first-child {
                     text-align: right;
                     border: none;
@@ -217,11 +255,11 @@ section {
                     padding-right: 1em;
                 }
 
-                td:nth-child(2){
+                td:nth-child(2) {
                     padding: 0.5em;
                 }
             }
-            
+
         }
     }
 
@@ -240,7 +278,7 @@ section {
         background-position: center;
         background-size: cover;
 
-        .add-movie-image-upload-instructions {
+        div {
             color: $main-mid-color;
             text-align: center;
             display: block;
@@ -261,8 +299,12 @@ section {
             border: 3px dashed red;
         }
 
-        &.uploaded{
+        &.uploaded {
             border: none;
+
+            .add-movie-image-upload-instructions {
+                display: none;
+            }
         }
     }
 

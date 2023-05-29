@@ -17,16 +17,25 @@
 
 <body>
     <header>
+        <div class="search-container">
+            <input id="searchFilmsInput" type="text" placeholder="Search Films...">
+            <button id="addMovieButton">
+                <img src="vectors/plus.svg">
+            </button>
+        </div>
         <nav>
-            <div class="search-container">
-                <input id="searchFilmsInput" type="text" placeholder="Search Films...">
-                <button id="addMovieButton">
-                    <img src="vectors/plus.svg">
-                </button>
+            <div id="movies-button" class="nav-button selected">
+                <img src="vectors/movies-icon-active.svg" />
+                <a>Movies</a>
             </div>
-            <a class="selected">Movies</a>
-            <a>Reviews</a>
-            <a>Watch List</a>
+            <div id="reviews-button" class="nav-button">
+                <img src="vectors/star-icon-inactive.svg" />
+                <a>Reviews</a>
+            </div>
+            <div id="watchlist-button" class="nav-button">
+                <img src="vectors/watch-icon-inactive.svg" />
+                <a>Watch List</a>
+            </div>
         </nav>
     </header>
 
@@ -107,7 +116,7 @@
         <div class="flex-grid">
 
             <div id="add-movie-image-upload-area" class="upload-image-area">
-                <div id="add-movie-image-upload-instructions">
+                <div class="add-movie-image-upload-instructions">
                     <!-- while this could be an <img> tag, an <object> tag allows for manipulations in css -->
                     <object data="./vectors/folder.svg" type="image/svg+xml"></object>
                     <p>Drop poster image or <a>browse</a></p>
@@ -142,6 +151,17 @@
 
                     <tr>
                         <td>
+                            <label for="add-movie-cast">Starring Cast</label>
+                        </td>
+                        <td>
+                            <div class="input-multi" id="add-movie-cast">
+                                <input type="text" name="add-movie-cast">
+                            </div>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td>
                             <label for="add-movie-duration">Duration</label>
                         </td>
                         <td>
@@ -165,9 +185,7 @@
                             <label for="add-movie-budget">Budget</label>
                         </td>
                         <td>
-                            <div class="input-multi" id="add-movie-genres">
-                                <input type="text" name="add-movie-budget" id="add-movie-budget">
-                            </div>
+                            <input type="text" name="add-movie-budget" id="add-movie-budget">
                         </td>
                     </tr>
 
@@ -193,17 +211,6 @@
 
                     <tr>
                         <td>
-                            <label for="add-movie-cast">Starring Cast</label>
-                        </td>
-                        <td>
-                            <div class="input-multi" id="add-movie-cast">
-                                <input type="text" name="add-movie-cast">
-                            </div>
-                        </td>
-                    </tr>
-
-                    <tr>
-                        <td>
                             <label for="add-movie-colour">Colour</label>
                         </td>
                         <td>
@@ -222,29 +229,19 @@
                     </tr>
                 </table>
 
-                <input type="submit" value="Add Movie">
+                <button id="add-movie-button">Add Movie</button>
             </form>
 
             <button id="movieAddPageExitButton" class="exit-button">
                 <img src="vectors/cross.svg">
             </button>
-
         </div>
-
-
-        </div>
-
-
     </section>
 
     <section id="mainPage">
         <h1 class="cards-title">Based on What You've Reviewed</h1>
-        <div class="card-container">
-            <div class="card"></div>
-            <div class="card"></div>
-            <div class="card"></div>
-            <div class="card"></div>
-            <div class="card"></div>
+        <div id="card-container-based-on-reviews" class="card-container">
+
         </div>
     </section>
 </body>

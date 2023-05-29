@@ -154,9 +154,6 @@ export class MultiSelectField {
                         setCaretPosition(selectedInput.parentElement.nextElementSibling.querySelector("input"), 0);
                     }
                 } else {
-                    console.log("yet");
-                    // set carot to button element
-                    // this.addButton.focus();
                     setCaretPosition(this.addButton, 0);
                 }
             }
@@ -184,8 +181,9 @@ export class MultiSelectField {
         const values = []
         this.getFieldBoxes().forEach((element) => {
             // empty strings will not be added
-            if (element.value) {
-                values.push(element.value);
+            const input = element.querySelector("input");
+            if (input.value) {
+                values.push(input.value);
             }
         });
         return values;
