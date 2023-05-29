@@ -19,10 +19,6 @@ export class MultiSelectField {
 
         // get label template from nested label tag (first one, if it exists)
         this.labelElement = containerElem.querySelector("label").cloneNode(true);
-        // put the label element above the multi select field
-        if (this.labelElement) {
-            containerElem.parentElement.insertBefore(this.labelElement, containerElem);
-        }
 
         // find which input tag to clone based the first contained input element
         this.templateInputField = this.getTemplateInputField(containerElem);
@@ -30,13 +26,17 @@ export class MultiSelectField {
         // remove everything inside the container because we've gotten the input template
         containerElem.textContent = "";
 
-        // determine the max number of allowed inputs by the elements "max" attribute
-        this.maxInputs = containerElem.getAttribute("max");
+        // determine the max number of allowed inputs by the elements "data-max" attribute
+        this.maxInputs = containerElem.getAttribute("data-max");
         // if max is not given, a default value is used.
         if (this.maxInputs == undefined) {
             this.maxInputs = MultiSelectField.DEFAULT_MAX_FIELDS;
         }
 
+        // put the label element above the multi select field
+        if (this.labelElement) {
+            containerElem.append(this.labelElement);
+        }
 
         // add the first input/s
         for (let i = 0; i < count; i++) {
@@ -68,11 +68,7 @@ export class MultiSelectField {
         const input = this.templateInputField.cloneNode();
         inputFieldElem.append(input);
         const removeButton = this.createRemoveFieldButton(() => {
-            if (this.tryRemoveFieldBox(inputFieldElem)) {
-                // if successfully removed, move cursor carot to previous element
-                // const previousInput = this.getLastFieldBox().querySelector("input");
-                // setCaretPosition(previousInput, previousInput.value.length);
-            }
+            this.tryRemoveFieldBox(inputFieldElem);
         });
         inputFieldElem.append(removeButton);
         return inputFieldElem;
@@ -81,8 +77,7 @@ export class MultiSelectField {
     createAddFieldButton(callback) {
         const addButton = document.createElement("img");
         addButton.src = addVectorImage;
-        // addButton.textContent = "+";
-        // addButton.name = this.containerElem.id;
+
         addButton.classList.add(MultiSelectField.ADD_BUTTON_CLASS);
         this.containerElem.append(addButton);
 
@@ -254,7 +249,7 @@ export class MultiSelectField {
     }
 
     showRemoveFieldBoxButton(fieldBox) {
-        fieldBox.querySelector(`.${MultiSelectField.REMOVE_BUTTON_CLASS}`).style.display = "";
+        fieldBox.querySelector(`.${MultiSelectField.REMOVE_BUTTON_CLASS}`).style.display = "block";
     }
 
     hideRemoveFieldBoxButton(fieldBox) {
