@@ -1,16 +1,47 @@
 # Movie Tracker
-
-
 <!-- (table might look a bit strange if not rendered in markdown) -->
 ## Package Dependencies
 | Package  | Version | Purpose |
 | -------- | ------- | --------|
 | [animejs](https://www.npmjs.com/package/animejs) | 3.2.1  |  | 
 | [sass](https://www.npmjs.com/package/sass)  | 1.62.0 |  |
-| [uuid](https://www.npmjs.com/package/uuid)  | 9.0.0  |
 | [express](https://www.npmjs.com/package/express) | 4.18.2 |
 
 ## Design Decisions
+### Fonts
+### Icons
+### Animations
+### Performance
+### Color Palette
+### Accessibility
+### Browser Support
+### Mobile Support
+### SEO
 
-### Accessiblity
-Tab index support for input fields
+## Development Process
+### Wireframes
+### Data Models
+
+## Design Iterations
+### Iteration 1
+### Iteration 2
+### Iteration 3
+
+## Future Improvements
+
+## Deployment Procedures
+### Install Dependencies
+> `npm install`
+
+### Run Development Server
+> `npm run dev`
+
+### Build Production Files
+> `npm run build`
+
+### Run Production Server
+> `node server.js`
+
+## Lessons Learned
+
+## References
