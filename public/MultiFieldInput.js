@@ -17,9 +17,6 @@ export class MultiSelectField {
         // element that contains all the inputs
         this.containerElem = containerElem;
 
-        // get label template from nested label tag (first one, if it exists)
-        this.labelElement = containerElem.querySelector("label").cloneNode(true);
-
         // find which input tag to clone based the first contained input element
         this.templateInputField = this.getTemplateInputField(containerElem);
 
@@ -31,11 +28,6 @@ export class MultiSelectField {
         // if max is not given, a default value is used.
         if (this.maxInputs == undefined) {
             this.maxInputs = MultiSelectField.DEFAULT_MAX_FIELDS;
-        }
-
-        // put the label element above the multi select field
-        if (this.labelElement) {
-            containerElem.append(this.labelElement);
         }
 
         // add the first input/s
@@ -60,7 +52,11 @@ export class MultiSelectField {
             // Should only contain 1 input element to clone, if multiple we just clone the first one
             console.warn("Multi select fields should have only 1 template input.");
         }
-        return containedInputs[0].cloneNode();
+
+        const template = containedInputs[0].cloneNode();
+        template.removeAttribute("id") // make sure that any id is remove so its unque
+
+        return template;
     }
 
     addInputField() {
@@ -75,13 +71,14 @@ export class MultiSelectField {
     }
 
     createAddFieldButton(callback) {
-        const addButton = document.createElement("img");
+        const addButton = document.createElement("input");
+        addButton.type = "image";
         addButton.src = addVectorImage;
 
         addButton.classList.add(MultiSelectField.ADD_BUTTON_CLASS);
         this.containerElem.append(addButton);
 
-        // button event listen for adding a new field entry
+        // When the button is clicked, call the callback function.
         addButton.addEventListener("click", (event) => {
             event.preventDefault();
             callback();
@@ -139,22 +136,30 @@ export class MultiSelectField {
 
     handleArrowLeft(keyEvent) {
         const selectedInput = this.getCurrentlySelectedFieldBox();
-        if (selectedInput && this.containerElem && selectedInput.selectionStart === 0) {
-            setCaretPosition(selectedInput.previousElementSibling, 0);
+        if (selectedInput && selectedInput.selectionStart === 0) {
+            if (selectedInput.parentElement &&
+                selectedInput.parentElement.previousElementSibling) {
+                setCaretPosition(selectedInput.parentElement.previousElementSibling.querySelector("input"), 0);
+            }
         }
     }
 
     handleArrowRight(keyEvent) {
         const selectedInput = this.getCurrentlySelectedFieldBox();
         if (selectedInput) {
-            if (this.containerElem && selectedInput.selectionStart === selectedInput.value.length) {
-                if (selectedInput !== this.containerElem.querySelector("input:last-of-type")) {
-                    setCaretPosition(selectedInput.nextElementSibling, 0);
+            if (selectedInput.selectionStart === selectedInput.value.length) {
+                if (selectedInput.parentElement
+                    && selectedInput.parentElement !== this.getLastFieldBox()) {
+                    if (selectedInput.parentElement.nextElementSibling) {
+                        setCaretPosition(selectedInput.parentElement.nextElementSibling.querySelector("input"), 0);
+                    }
+                } else {
+                    console.log("yet");
+                    // set carot to button element
+                    // this.addButton.focus();
+                    setCaretPosition(this.addButton, 0);
                 }
             }
-        } else if (document.activeElement === this.addButton) {
-            // check if add box is selected, try add a new box field
-            this.TryAddFieldBox();
         }
     }
 
@@ -166,7 +171,16 @@ export class MultiSelectField {
         }
     }
 
-    GetValues() {
+    clearValues(){
+        const boxes = this.getFieldBoxes();
+        boxes.forEach(box => {
+            this.tryRemoveFieldBox(box);
+        });
+        // reset the value of the only remaining box
+        boxes[0].querySelector("input").value = "";
+    }
+
+    getValues() {
         const values = []
         this.getFieldBoxes().forEach((element) => {
             // empty strings will not be added

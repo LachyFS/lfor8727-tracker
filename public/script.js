@@ -80,6 +80,9 @@ moviePageExitButton.addEventListener('click', (event) => {
 
 // movie add
 movieAddButton.addEventListener('click', (event) => {
+    // clear any input possibily left over before opening
+    clearAllInputs();
+
     openPage(movieAddPage);
 });
 movieAddPageExitButton.addEventListener('click', (event) => {
@@ -102,7 +105,7 @@ document.addEventListener('keydown', (event) => {
 
 movieGenres = ["Drama", "Comedy", "Action", "Fantasy", "Horror", "Romance", "Western", "Thriller"]
 
-function createDataList(id, optionValues){
+function createDataList(id, optionValues) {
     const dataList = document.createElement("datalist");
     dataList.id = id;
     optionValues.forEach((value) => {
@@ -134,5 +137,67 @@ class Movie {
     }
 }
 
-const multiSelectFields = document.querySelectorAll(".input-multi");
-multiSelectFields.forEach((element) => new MultiSelectField(element));
+const multiSelectFieldElements = document.querySelectorAll(".input-multi");
+const multiSelectFields = [];
+
+multiSelectFieldElements.forEach((element) => {
+    multiSelectFields.push(new MultiSelectField(element));
+});
+
+function clearAllInputs() {
+    // reset multi select fields
+    multiSelectFields.forEach(multiSelectField => {
+        multiSelectField.clearValues();
+    });
+
+    // reset all input elements
+    const allInputElements = document.querySelectorAll("input");
+    allInputElements.forEach(element => {
+
+        switch (element.type) {
+            case "color":
+                // default colour as white
+                element.value = "#fff"
+                break;
+            default:
+                // else just set as empty
+                element.value = ""
+                break;
+        }
+    });
+}
+
+const posterImageDropOffElem = document.querySelector("#add-movie-image-upload-area");
+
+posterImageDropOffElem.addEventListener("dragover", (event) => {
+    event.preventDefault();
+    posterImageDropOffElem.classList.add("drag-over");
+});
+
+posterImageDropOffElem.addEventListener("dragleave", (event) => {
+    event.preventDefault();
+    posterImageDropOffElem.classList.remove("drag-over");
+});
+
+posterImageDropOffElem.addEventListener("drop", (event) => {
+    event.preventDefault();
+    posterImageDropOffElem.classList.remove("drag-over");
+    const image = event.dataTransfer.files[0];
+
+    // check if image is valid
+    if (image.type.startsWith("image/")) {
+        // set poster image background to image
+        const reader = new FileReader();
+        reader.onload = (event) => {
+            // set background
+            posterImageDropOffElem.style.backgroundImage = `url(${event.target.result})`;
+            
+            // hide upload instructions
+            document.querySelector("#add-movie-image-upload-instructions").style.display = "none";
+
+            // add uploaded class to poster elem
+            posterImageDropOffElem.classList.add("uploaded");
+        };
+        reader.readAsDataURL(image);
+    }
+});

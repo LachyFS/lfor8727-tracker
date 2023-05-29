@@ -10,6 +10,8 @@ $mid-gray-col: #2B2B2B;
 $input-border: 2px solid #2B2B2B;
 $input-font-size: 16px;
 $input-hover-col: #161616;
+$field-height: 2em;
+
 
 // global fonts
 $body-font-family: 'Inter', Arial, Helvetica, sans-serif;
@@ -157,7 +159,7 @@ section {
         padding: 1em;
     }
 
-    header > button {
+    header>button {
         margin-left: auto;
     }
 
@@ -195,21 +197,50 @@ section {
     width: 95%;
     border-radius: $border-rad;
 
-    .flex-grid{
+    .flex-grid {
         margin-top: 4em;
         column-gap: 2em;
         align-items: flex-start;
         justify-content: space-between;
+
+        table {
+            width: 100%;
+            // border-spacing: 1.5em 0.5em;
+            
+            tr{
+                height: 3em;
+                
+                td:first-child {
+                    text-align: right;
+                    border: none;
+                    width: 15%;
+                    padding-right: 1em;
+                }
+
+                td:nth-child(2){
+                    padding: 0.5em;
+                }
+            }
+            
+        }
     }
 
     .upload-image-area {
-        width: 30%;
+        box-sizing: border-box;
+        display: block;
+        width: 640px;
+        height: 960px;
+
         margin: 0;
         border: 3px dashed $main-mid-color;
         border-radius: 25px;
-        background-color: $alt-background-col;
 
-        div {
+        background-color: $alt-background-col;
+        background-repeat: no-repeat;
+        background-position: center;
+        background-size: cover;
+
+        .add-movie-image-upload-instructions {
             color: $main-mid-color;
             text-align: center;
             display: block;
@@ -224,13 +255,22 @@ section {
                 margin: auto;
             }
         }
+
+        // on drag over
+        &.drag-over {
+            border: 3px dashed red;
+        }
+
+        &.uploaded{
+            border: none;
+        }
     }
 
     form {
         width: 65%;
     }
 
-    #movieAddPageExitButton{
+    #movieAddPageExitButton {
         width: 5%;
         margin: 0.5em;
     }
@@ -244,6 +284,7 @@ textarea {
     font-family: $body-font-family;
     width: 100%;
     font-size: $input-font-size;
+    padding: 1em;
 
     // reset
     resize: none;
@@ -298,10 +339,11 @@ br {
     background-color: $alt-background-col;
     border: $input-border;
     border-radius: $border-rad;
-    padding: 0.5em 2em;
     color: $main-text-col;
-    height: 3em;
-    margin: 0.25em;
+    height: $field-height;
+
+    margin: 0.5em 0;
+    padding: 0.5em 2em;
 
     font-family: $body-font-family;
     font-size: $input-font-size;
@@ -309,6 +351,7 @@ br {
 
 input {
     @extend .input-generic;
+    margin: 0.5em 0;
 }
 
 input[type=date] {
@@ -323,25 +366,17 @@ input[type=date] {
     width: 100%;
     height: 3em;
     font-weight: bold;
-    margin-left: 0;
-    margin-top: 0;
+    margin: 0 0 2em 0;
 }
 
-hr{
-    border: $mid-gray-col 1px solid;
-}
 
 .input-multi {
-    box-sizing: border-box; // makes element fit properly
     display: flex;
     align-items: center;
     flex-wrap: wrap;
-    column-gap: 1em;
-    row-gap: 1em;
-    margin: 0.5em;
+    gap: 0.5em;
+    width: 100%;
 
-    $field-height: 2.5em;
-    
     .add-field-button {
         @extend .input-generic;
         cursor: pointer;

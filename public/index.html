@@ -106,8 +106,8 @@
 
         <div class="flex-grid">
 
-            <div class="upload-image-area">
-                <div>
+            <div id="add-movie-image-upload-area" class="upload-image-area">
+                <div id="add-movie-image-upload-instructions">
                     <!-- while this could be an <img> tag, an <object> tag allows for manipulations in css -->
                     <object data="./vectors/folder.svg" type="image/svg+xml"></object>
                     <p>Drop poster image or <a>browse</a></p>
@@ -118,57 +118,109 @@
 
                 <input type="text" class="big-text-input" name="add-movie-name" id="add-movie-name"
                     placeholder="Movie Name" spellcheck="true">
-                <br>
 
-                <div class="input-multi" data-max="5" id="add-movie-directed-by">
-                    <label for="add-movie-directed-by">Directed By</label>
-                    <input type="text" name="add-movie-directed-by" placeholder="Director Name">
-                </div>
+                <table>
+                    <tr>
+                        <td>
+                            <label for="add-movie-directed-by">Directed By</label>
+                        </td>
+                        <td>
+                            <div class="input-multi" data-max="5" id="add-movie-directed-by">
+                                <input type="text" name="add-movie-directed-by" placeholder="Director Name">
+                            </div>
+                        </td>
+                    </tr>
 
-                <br>
-                <label for="add-movie-release-date">Release Date</label>
-                <input type="date" name="add-movie-release-date" id="add-movie-release-date">
+                    <tr>
+                        <td>
+                            <label for="add-movie-release-date">Release Date</label>
+                        </td>
+                        <td>
+                            <input type="date" name="add-movie-release-date" id="add-movie-release-date">
+                        </td>
+                    </tr>
 
-                <br>
-                <label for="add-movie-duration">Duration (Mins)</label>
-                <input type="text" name="add-movie-duration" id="add-movie-duration">
-                <label for="add-movie-duration">Minutes</label>
+                    <tr>
+                        <td>
+                            <label for="add-movie-duration">Duration</label>
+                        </td>
+                        <td>
+                            <input type="text" name="add-movie-duration" id="add-movie-duration">
+                        </td>
+                    </tr>
 
-                <br>
-                <div class="input-multi" id="add-movie-genres">
-                    <label for="add-movie-genres">Genres</label>
-                    <input list="genresList" name="add-movie-genres" id="add-movie-genre">
-                </div>
-                <br>
-                <label for="add-movie-budget">Budget</label>
-                <input type="text" name="add-movie-budget" id="add-movie-budget">
+                    <tr>
+                        <td>
+                            <label for="add-movie-genres">Genres</label>
+                        </td>
+                        <td>
+                            <div class="input-multi" id="add-movie-genres">
+                                <input list="genresList" name="add-movie-genres" id="add-movie-genre">
+                            </div>
+                        </td>
+                    </tr>
 
-                <br>
-                
-                <label for="add-movie-box-office">Box Office</label>
-                <input type="text" name="add-movie-box-office" id="add-movie-box-office">
+                    <tr>
+                        <td>
+                            <label for="add-movie-budget">Budget</label>
+                        </td>
+                        <td>
+                            <div class="input-multi" id="add-movie-genres">
+                                <input type="text" name="add-movie-budget" id="add-movie-budget">
+                            </div>
+                        </td>
+                    </tr>
 
-                <br>
-                
-                <div class="input-multi" id="add-movie-countries">
-                    <label for="add-movie-countries">Country</label>
-                    <input type="text" name="add-movie-countries">
-                </div>
+                    <tr>
+                        <td>
+                            <label for="add-movie-box-office">Box Office</label>
+                        </td>
+                        <td>
+                            <input type="text" name="add-movie-box-office" id="add-movie-box-office">
+                        </td>
+                    </tr>
 
-                <br>
-                <div class="input-multi" id="add-movie-cast">
-                    <label for="add-movie-cast">Starring Cast</label>
-                    <input type="text" name="add-movie-cast">
-                </div>
+                    <tr>
+                        <td>
+                            <label for="add-movie-countries">Country</label>
+                        </td>
+                        <td>
+                            <div class="input-multi" id="add-movie-countries">
+                                <input type="text" name="add-movie-countries">
+                            </div>
+                        </td>
+                    </tr>
 
-                <br>
-                <label for="add-movie-colour">Colour</label>
-                <input type="text" name="add-movie-colour" id="add-movie-colour">
-                <input type="color" name="add-movie-colour" id="add-movie-colour">
-                <br>
-                
-                <label for="add-movie-synopsis">Synopsis</label>
-                <textarea name="add-movie-synopsis" id="add-movie-synopsis" rows="10"></textarea>
+                    <tr>
+                        <td>
+                            <label for="add-movie-cast">Starring Cast</label>
+                        </td>
+                        <td>
+                            <div class="input-multi" id="add-movie-cast">
+                                <input type="text" name="add-movie-cast">
+                            </div>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td>
+                            <label for="add-movie-colour">Colour</label>
+                        </td>
+                        <td>
+                            <input type="text" name="add-movie-colour" id="add-movie-colour">
+                            <input type="color" name="add-movie-colour" id="add-movie-colour">
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td>
+                            <label for="add-movie-synopsis">Synopsis</label>
+                        </td>
+                        <td>
+                            <textarea name="add-movie-synopsis" id="add-movie-synopsis" rows="10"></textarea>
+                        </td>
+                    </tr>
+                </table>
 
                 <input type="submit" value="Add Movie">
             </form>
@@ -176,6 +228,9 @@
             <button id="movieAddPageExitButton" class="exit-button">
                 <img src="vectors/cross.svg">
             </button>
+
+        </div>
+
 
         </div>
 
