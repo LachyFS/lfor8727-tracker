@@ -11,6 +11,10 @@ import reviewsIconInactive from "./vectors/star-icon-inactive.svg";
 import watchlistIconActive from "./vectors/watch-icon-active.svg";
 import watchlistIconInactive from "./vectors/watch-icon-inactive.svg";
 
+import { moviesDataset } from "./data/movies.js";
+import PosterUploadArea from "./PosterUploadArea.js";
+import StarsInput from "./StarsInput.js";
+
 const movieDetailsPage = document.querySelector('#movie-details-page');
 
 const movieAddPage = document.querySelector('#movieAddPage')
@@ -202,14 +206,21 @@ class Movie {
     }
 }
 
+function populateMoviesStorage(){
+    // sets local storage of movies to an existing populated dataset
+    localStorage.setItem("movies", JSON.stringify(moviesDataset));
+    // returns the data that was just added
+    return moviesDataset;
+}
 
 // add stored movies from local storage
 function getStoredMovies() {
     const storedMovies = JSON.parse(localStorage.getItem("movies"));
-    // if no movies are stored, return empty object
+    // if no movies are stored, return a populated dataset
     if (storedMovies == null) {
-        return {};
+        return populateMoviesStorage();
     }
+    // otherwise return the stored movies from local storage
     return storedMovies;
 }
 
@@ -224,7 +235,7 @@ addMovieButton.addEventListener("click", (event) => {
     const name = document.querySelector("#add-movie-name").value;
 
     // get image from global variable (set in image upload function)
-    const image = currentlyUploadedImage;
+    const image = posterUpload.loadedImage;
 
     // get array values from multi-select fields
     const directors = multiSelectFields["add-movie-directed-by"].getValues();
@@ -232,8 +243,7 @@ addMovieButton.addEventListener("click", (event) => {
     const countries = multiSelectFields["add-movie-countries"].getValues();
     const cast = multiSelectFields["add-movie-cast"].getValues();
 
-
-    function parseMoney(moneyString) {
+    function parseCurrency(moneyString) {
         // remove all non-numeric characters with regex 
         // CITE: https://stackoverflow.com/questions/1862130/strip-all-non-numeric-characters-from-string-in-javascript
         const parsedMoney = String(moneyString).replace(/\D/g, "");
@@ -243,8 +253,8 @@ addMovieButton.addEventListener("click", (event) => {
     }
 
     // parse money values
-    const budget = parseMoney(document.querySelector("#add-movie-budget").value);
-    const boxOffice = parseMoney(document.querySelector("#add-movie-box-office").value);
+    const budget = parseCurrency(document.querySelector("#add-movie-budget").value);
+    const boxOffice = parseCurrency(document.querySelector("#add-movie-box-office").value);
 
     // get other values
     const releaseDate = document.querySelector("#add-movie-release-date").value;
@@ -342,12 +352,6 @@ function setMovieDetails(movie) {
         castList.append(listElem);
     }
 
-    // movie.cast.forEach((actor) => {
-    //     const actorElement = document.createElement("li");
-    //     actorElement.textContent = actor;
-    //     castList.append(actorElement);
-    // });
-
     function formatMoney(value) {
         let budgetFormatted = value;
         // if value is greater than a millon
@@ -363,9 +367,6 @@ function setMovieDetails(movie) {
         return budgetFormatted;
     }
 }
-
-
-
 
 // add movie cards
 const movieCardContainer = document.querySelector("#card-container-based-on-reviews");
@@ -424,13 +425,18 @@ function addMovieCard(movie, parentElement) {
 }
 
 function addAllMovieCards() {
+    const suggestionsCount = 8;
+    let i = 0;
     for (var movie in movies) {
+        if (i >= suggestionsCount) {
+            break;
+        }
         addMovieCard(movies[movie], movieCardContainer);
+        i++;
     }
 }
 
 addAllMovieCards();
-
 
 const multiSelectFieldElements = document.querySelectorAll(".input-multi");
 
@@ -473,109 +479,11 @@ function clearAllInputs() {
     });
 }
 
-const posterImageDropOffElem = document.querySelector("#add-movie-image-upload-area");
-let currentlyUploadedImage = "";
-
-// drag and drop file upload for poster image
-// CITE: https://www.smashingmagazine.com/2018/01/drag-drop-file-uploader-vanilla-js/
-
-// prevent event bubbling for drag / drop events
-['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventListenerName => {
-    posterImageDropOffElem.addEventListener(eventListenerName, (event) => {
-        event.preventDefault();
-        event.stopPropagation();
-    });
-});
-
-// highlight drop off area when file is dragged over
-['dragenter', 'dragover'].forEach(eventListenerName => {
-    posterImageDropOffElem.addEventListener(eventListenerName, (event) => {
-        event.preventDefault();
-        posterImageDropOffElem.classList.add("drag-over");
-    });
-});
-
-// remove highlight when file is dragged away
-['dragleave', 'drop'].forEach(eventListenerName => {
-    posterImageDropOffElem.addEventListener(eventListenerName, (event) => {
-        event.preventDefault();
-        posterImageDropOffElem.classList.remove("drag-over");
-    });
-});
-
-// handle file drop
-posterImageDropOffElem.addEventListener("drop", (event) => {
-    event.preventDefault();
-    posterImageDropOffElem.classList.remove("drag-over");
-    const image = event.dataTransfer.files[0];
-
-    readImageAsBase64(image, (base64Image) => {
-        // set background
-        updateUploadedPosterImage(base64Image);
-    });
-});
-
-// browse files upload poster image
-const posterImageBrowseButton = document.querySelector("#add-movie-image-upload-browse-link");
-
-posterImageBrowseButton.addEventListener("click", (event) => {
-    event.preventDefault();
-
-    // open browse file
-    browseImagePosterSelect();
-});
-
-function browseImagePosterSelect() {
-    const fileInput = document.createElement("input");
-
-    // set file input attributes
-    fileInput.type = "file";
-    fileInput.accept = "image/*";
-
-    // click file input to open file browser
-    fileInput.click();
-
-    // handle file input change
-    fileInput.addEventListener("change", (event) => {
-        const image = event.target.files[0];
-
-        readImageAsBase64(image, (base64Image) => {
-            updateUploadedPosterImage(base64Image);
-
-            // remove file input from DOM after use
-            fileInput.remove();
-        });
-    }, { once: true });
-}
-
-function readImageAsBase64(image, callback) {
-    // validation
-    if (!image.type.startsWith("image/")) {
-        throw new Error("Invalid image type");
-    }
-
-    const reader = new FileReader();
-    reader.onload = (event) => {
-        // call callback with base64 encoded image as argument
-        callback(event.target.result);
-    };
-    // read image as a data url
-    reader.readAsDataURL(image);
-}
+const posterUpload = new PosterUploadArea("add-movie-image-upload-area");
 
 
-function updateUploadedPosterImage(base64Image) {
-    posterImageDropOffElem.style.backgroundImage = `url(${base64Image})`;
+const starRatingContainer = document.querySelector("#movie-review-star-ratings");
 
-    // updated currently uploaded image
-    currentlyUploadedImage = base64Image;
-
-    // add uploaded class to poster elem
-    posterImageDropOffElem.classList.add("uploaded");
-
-    // allow user to change image by clicking on the poster
-    posterImageDropOffElem.addEventListener("click", (event) => {
-        event.preventDefault();
-        browseImagePosterSelect();
-    }, { once: true }); // only once to prevent multiple event listeners being added
-}
+const cinematographyStarsRating = new StarsInput("movie-review-cinematography-stars", starRatingContainer, "Cinematography");
+const narrativeStarsRating = new StarsInput("movie-review-narrative-stars", starRatingContainer, "Narrative");
+const visualEffectsStarsRating = new StarsInput("movie-review-visual-effects-stars", starRatingContainer, "Visual Effects");
