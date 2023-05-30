@@ -34,6 +34,10 @@ h1 {
     margin-left: 1em;
 }
 
+h2 {
+    margin: 0.25em;
+}
+
 body>header {
     background-color: $main-background-col;
     color: $main-text-col;
@@ -73,9 +77,16 @@ body>header {
 
 .search-container {
     display: flex;
+    column-gap: 1em;
     align-items: center;
     margin-left: 1em;
     margin-right: auto;
+}
+
+#add-movie-image-upload-browse-link{
+    cursor: pointer;
+    text-decoration: underline;
+    font-weight: bold;
 }
 
 #addMovieButton {
@@ -104,7 +115,7 @@ body>header {
 
 section {
     margin: 0 auto;
-    width: 90%;
+    width: 95%;
 }
 
 // TODO: This likely doesnt work on firefox!!
@@ -177,6 +188,8 @@ section {
                 border-radius: $border-rad;
                 flex-direction: column;
                 height: 100%;
+                margin-left: 1em;
+                margin-right: 1em;
 
                 // title
                 .card-heading {
@@ -213,17 +226,17 @@ section {
 
 }
 
-#movieDetailsPage {
+#movie-details-page {
+
+    background-color: $main-background-col;
+
+    margin: 2em auto;
     color: $main-text-col;
-    padding: 2em;
+    padding: 1em;
     border-radius: $border-rad;
 
     z-index: 2;
     opacity: 0;
-
-    .review-form {
-        background-color: $alt-background-col;
-    }
 
     .movie-information {
         margin-left: 3em;
@@ -233,6 +246,10 @@ section {
     header {
         display: flex;
         padding: 1em;
+
+        h1 {
+            font-size: 3em;
+        }
     }
 
     header>button {
@@ -243,7 +260,7 @@ section {
         display: flex;
 
         #movie-details-poster {
-            width: 20%;
+            width: 30%;
             height: 100%;
             border-radius: $border-rad;
             object-fit: cover;
@@ -256,7 +273,7 @@ section {
                 box-sizing: content-box;
                 margin-right: 3em;
 
-                h2{
+                h2 {
                     margin-top: 0;
                 }
 
@@ -271,18 +288,19 @@ section {
                     margin: 0;
                 }
             }
-
-        }
-
-        .review-box {
-            background-color: $alt-background-col;
-            margin-right: 3em;
         }
     }
 
     h1 {
         margin: 0;
     }
+}
+
+.section-light {
+    border-radius: $border-rad;
+    background-color: $alt-background-col;
+    margin-right: 3em;
+    padding: 1em;
 }
 
 #movieAddPage {
@@ -354,6 +372,7 @@ section {
         }
 
         &.uploaded {
+            cursor: pointer; // because clicking on poster to change it is not that intuitive
             border: none;
 
             .add-movie-image-upload-instructions {
@@ -373,6 +392,7 @@ section {
 }
 
 textarea {
+    box-sizing: border-box;
     background-color: $main-background-col;
     border-radius: $border-rad;
     border: $input-border;
@@ -388,23 +408,6 @@ textarea {
     overflow: auto;
 }
 
-.button {
-    background-color: $main-text-col;
-    color: $main-background-col;
-    padding: 1em 2em;
-    font-weight: 700;
-    font-size: 1em;
-    border-radius: 20px;
-    cursor: pointer;
-    transition: color, background-color 100ms;
-}
-
-.button:hover {
-    border: $input-border;
-    background-color: $alt-background-col;
-    color: $main-text-col;
-    border: $main-mid-color solid 1px !important;
-}
 
 
 // generic grid class to align elements next to each other
@@ -519,15 +522,37 @@ input[type=date] {
     }
 }
 
-input[type=submit] {
-    // use of scss inheritance implements existing properties of the base button class  
-    @extend .button;
-    margin: 0;
-    box-sizing: content-box;
+.button-light {
+    display: block;
+    background-color: $main-text-col;
+    color: $main-background-col;
+    padding: 0.75em 3em;
+    font-weight: 700;
+    font-size: 1em;
+    border-radius: 10em;
+    cursor: pointer;
+    transition: color, background-color 100ms;
+    border: none;
 
+    &:hover {
+        @include focus-effect;
+        background-color: $alt-background-col;
+        color: $main-text-col;
+    }
 }
 
-#searchFilmsInput {
+#add-movie-button{
+    @extend .button-light; // inherit from button-light
+    margin: 0 auto; // center
+}
+
+#add-review-button{
+    @extend .button-light; // inherit from button-light
+    margin: 0 0.5em 0.5em auto; // align to the right
+}
+
+// top search bar
+#search-films-input {
     background-color: white;
     border-radius: 5em;
     padding: 0.5em;

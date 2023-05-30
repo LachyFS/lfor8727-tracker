@@ -11,7 +11,7 @@ import reviewsIconInactive from "./vectors/star-icon-inactive.svg";
 import watchlistIconActive from "./vectors/watch-icon-active.svg";
 import watchlistIconInactive from "./vectors/watch-icon-inactive.svg";
 
-const movieDetailsPage = document.querySelector('#movieDetailsPage');
+const movieDetailsPage = document.querySelector('#movie-details-page');
 
 const movieAddPage = document.querySelector('#movieAddPage')
 const movieAddButton = document.querySelector('#addMovieButton')
@@ -73,8 +73,8 @@ let cards = document.querySelectorAll(".card");
 
 function openPage(pageElement) {
     if (!isPageOpen(pageElement)) {
-        hideAllPages(120);
-        showPage(pageElement, 120);
+        hideAllPages(200);
+        showPage(pageElement, 200);
     }
 }
 
@@ -105,7 +105,7 @@ const reviewsButtonHandler = createNavButtonHandler("reviews-button", reviewsIco
 const watchlistButtonHandler = createNavButtonHandler("watchlist-button", watchlistIconActive, watchlistIconInactive);
 
 function createNavButtonHandler(buttonId, activeIcon, inactiveIcon) {
-    
+
     const element = document.querySelector(`#${buttonId}`);
 
     const icon = element.querySelector("img");
@@ -222,7 +222,7 @@ addMovieButton.addEventListener("click", (event) => {
 
     // get all the data from the form
     const name = document.querySelector("#add-movie-name").value;
-    
+
     // get image from global variable (set in image upload function)
     const image = currentlyUploadedImage;
 
@@ -231,21 +231,21 @@ addMovieButton.addEventListener("click", (event) => {
     const genres = multiSelectFields["add-movie-genres"].getValues();
     const countries = multiSelectFields["add-movie-countries"].getValues();
     const cast = multiSelectFields["add-movie-cast"].getValues();
-    
-    
+
+
     function parseMoney(moneyString) {
         // remove all non-numeric characters with regex 
         // CITE: https://stackoverflow.com/questions/1862130/strip-all-non-numeric-characters-from-string-in-javascript
         const parsedMoney = String(moneyString).replace(/\D/g, "");
-        
+
         // convert to number
         return Number(parsedMoney);
     }
-    
+
     // parse money values
     const budget = parseMoney(document.querySelector("#add-movie-budget").value);
     const boxOffice = parseMoney(document.querySelector("#add-movie-box-office").value);
-    
+
     // get other values
     const releaseDate = document.querySelector("#add-movie-release-date").value;
     const duration = document.querySelector("#add-movie-duration").value;
@@ -281,20 +281,20 @@ function addMovie(movie) {
     localStorage.setItem("movies", JSON.stringify(movies));
 }
 
-function setMovieDetails(movie){
+function setMovieDetails(movie) {
 
     // set title
     movieDetailsPage.querySelector("#movie-details-title").textContent = movie.name;
 
     // set image source if available
-    if (movie.image){
+    if (movie.image) {
         movieDetailsPage.querySelector("#movie-details-poster").src = movie.image;
     }
 
     // set subheading year and genres
     movieDetailsPage.querySelector("#movie-details-year").textContent = movie.releaseDate.split("-")[0];
     movieDetailsPage.querySelector("#movie-details-genre").textContent = movie.genres.join(" | ");
-    
+
     // set synopsis
     movieDetailsPage.querySelector("#movie-details-synopsis").textContent = movie.synopsis;
 
@@ -304,7 +304,7 @@ function setMovieDetails(movie){
     // set release date
     // format release date as day month year
     // CITE: https://stackoverflow.com/questions/3552461/how-do-i-format-a-date-in-javascript
-    const releaseDateFormatted = new Date(movie.releaseDate).toLocaleDateString("en-GB", {day: "numeric", month: "long", year: "numeric"});
+    const releaseDateFormatted = new Date(movie.releaseDate).toLocaleDateString("en-GB", { day: "numeric", month: "long", year: "numeric" });
     movieDetailsPage.querySelector("#movie-details-release-date").textContent = releaseDateFormatted;
 
     // set runtime
@@ -326,17 +326,32 @@ function setMovieDetails(movie){
     movieDetailsPage.querySelector("#movie-details-country").textContent = movie.countries.join(", ");
 
     // set list of cast
+    maxDisplayedCast = 5;
     const castList = movieDetailsPage.querySelector("#movie-details-cast-list");
-    movie.cast.forEach((actor) => {
-        const actorElement = document.createElement("li");
-        actorElement.textContent = actor;
-        castList.append(actorElement);
-    });
+
+    // clear list
+    castList.innerHTML = "";
+
+    for (let i = 0; i < Math.min(maxDisplayedCast + 1, movie.cast.length); i++) {
+        const listElem = document.createElement("li");
+        if (i == maxDisplayedCast) {
+            listElem.textContent = "and more...";
+        } else {
+            listElem.textContent = movie.cast[i];
+        }
+        castList.append(listElem);
+    }
+
+    // movie.cast.forEach((actor) => {
+    //     const actorElement = document.createElement("li");
+    //     actorElement.textContent = actor;
+    //     castList.append(actorElement);
+    // });
 
     function formatMoney(value) {
         let budgetFormatted = value;
         // if value is greater than a millon
-        if (value > 1000000){
+        if (value > 1000000) {
             // format end with millions or billions when over 1 billion
             budgetFormatted = value / 1000000 > 1000 ? `${value / 1000000000} billion` : `${value / 1000000} million`;
         }
@@ -362,41 +377,41 @@ function addMovieCard(movie, parentElement) {
     // backdrop container
     const backdropContainer = document.createElement("div");
     backdropContainer.classList.add("card-backdrop");
-    
+
     // card info container
     const cardInfo = document.createElement("div");
     cardInfo.classList.add("card-info");
     backdropContainer.append(cardInfo);
-    
+
     // card info heading
     const heading = document.createElement("h2");
     heading.textContent = movie.name;
     heading.classList.add("card-heading");
     cardInfo.append(heading);
-    
+
     // footer
     const footer = document.createElement("div");
     footer.classList.add("card-footer");
     cardInfo.append(footer);
-    
+
     // card info year
     const year = document.createElement("p");
     year.classList.add("card-year");
     // split release date by "-" and get the first element (year)
     year.textContent = movie.releaseDate.split("-")[0];
     footer.append(year);
-    
+
     // card info genres
     const genres = document.createElement("p");
     genres.classList.add("card-genres");
     genres.textContent = movie.genres.join(" | ");
     footer.append(genres);
-    
+
     // set background image if available
-    if (movie.image){
+    if (movie.image) {
         container.style.backgroundImage = `url(${movie.image})`;
     }
-    
+
     container.append(backdropContainer);
 
     // callback function for when the card is clicked
@@ -494,25 +509,73 @@ posterImageDropOffElem.addEventListener("drop", (event) => {
     posterImageDropOffElem.classList.remove("drag-over");
     const image = event.dataTransfer.files[0];
 
-    // check if image is valid
-    if (image.type.startsWith("image/")) {
-        // set poster image background to image
-        const reader = new FileReader();
-        reader.onload = (event) => {
-            
-            // base64 encoded image
-            const base64Image = event.target.result;
-            
-            // set background
-            posterImageDropOffElem.style.backgroundImage = `url(${base64Image})`;
-            
-            // updated currently uploaded image
-            currentlyUploadedImage = base64Image;
-
-            // add uploaded class to poster elem
-            posterImageDropOffElem.classList.add("uploaded");
-        };
-        // read image as a data url
-        reader.readAsDataURL(image);
-    }
+    readImageAsBase64(image, (base64Image) => {
+        // set background
+        updateUploadedPosterImage(base64Image);
+    });
 });
+
+// browse files upload poster image
+const posterImageBrowseButton = document.querySelector("#add-movie-image-upload-browse-link");
+
+posterImageBrowseButton.addEventListener("click", (event) => {
+    event.preventDefault();
+
+    // open browse file
+    browseImagePosterSelect();
+});
+
+function browseImagePosterSelect() {
+    const fileInput = document.createElement("input");
+
+    // set file input attributes
+    fileInput.type = "file";
+    fileInput.accept = "image/*";
+
+    // click file input to open file browser
+    fileInput.click();
+
+    // handle file input change
+    fileInput.addEventListener("change", (event) => {
+        const image = event.target.files[0];
+
+        readImageAsBase64(image, (base64Image) => {
+            updateUploadedPosterImage(base64Image);
+
+            // remove file input from DOM after use
+            fileInput.remove();
+        });
+    }, { once: true });
+}
+
+function readImageAsBase64(image, callback) {
+    // validation
+    if (!image.type.startsWith("image/")) {
+        throw new Error("Invalid image type");
+    }
+
+    const reader = new FileReader();
+    reader.onload = (event) => {
+        // call callback with base64 encoded image as argument
+        callback(event.target.result);
+    };
+    // read image as a data url
+    reader.readAsDataURL(image);
+}
+
+
+function updateUploadedPosterImage(base64Image) {
+    posterImageDropOffElem.style.backgroundImage = `url(${base64Image})`;
+
+    // updated currently uploaded image
+    currentlyUploadedImage = base64Image;
+
+    // add uploaded class to poster elem
+    posterImageDropOffElem.classList.add("uploaded");
+
+    // allow user to change image by clicking on the poster
+    posterImageDropOffElem.addEventListener("click", (event) => {
+        event.preventDefault();
+        browseImagePosterSelect();
+    }, { once: true }); // only once to prevent multiple event listeners being added
+}

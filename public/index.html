@@ -18,7 +18,7 @@
 <body>
     <header>
         <div class="search-container">
-            <input id="searchFilmsInput" type="text" placeholder="Search Films...">
+            <input id="search-films-input" type="text" placeholder="Search Films...">
             <button id="addMovieButton">
                 <img src="vectors/plus.svg">
             </button>
@@ -40,7 +40,7 @@
     </header>
 
     <!-- toggleable movie details page where user can read about movie and write review -->
-    <section id="movieDetailsPage" class="hide">
+    <section id="movie-details-page" class="hide">
         <header>
             <div class="movie-title-container">
                 <h1 id="movie-details-title">Movie Title</h1>
@@ -76,17 +76,17 @@
                         </p>
                     </div>
                     <div class="details">
-                        <h2>Cast</h2>
+                        <h2>Starring Cast</h2>
                         <ul id="movie-details-cast-list">
                         </ul>
                     </div>
                 </div>
 
-                <form class="review-form">
+                <form class="section-light">
                     <label for="text-review">
                         <h2>Write Review</h2>
                     </label><br>
-                    <textarea name="text-review" id="text-review" rows="10"></textarea>
+                    <textarea name="text-review" id="text-review"></textarea>
                     <br>
                     <input type="range" name="cinematography-stars" id="cinematography-stars" min="1" max="5" step="1">
                     <label for="cinematography-stars">Cinematography</label>
@@ -100,7 +100,7 @@
                     <label for="watch-date-stars">Watch Date</label>
                     <input type="date" name="watch-date-stars" id="watch-date-stars">
                     <br>
-                    <input type="submit" value="Add Review">
+                    <button id="add-review-button">Add Review</button>
                 </form>
             </div>
         </div>
@@ -115,7 +115,7 @@
                 <div class="add-movie-image-upload-instructions">
                     <!-- while this could be an <img> tag, an <object> tag allows for manipulations in css -->
                     <object data="./vectors/folder.svg" type="image/svg+xml"></object>
-                    <p>Drop poster image or <a>browse</a></p>
+                    <p>Drop poster image or <u id="add-movie-image-upload-browse-link">browse</u></p>
                 </div>
             </div>
 
@@ -235,7 +235,7 @@
     </section>
 
     <section id="mainPage">
-        <h1 class="cards-title">Based on What You've Reviewed</h1>
+        <h1 class="cards-title">Recommended</h1>
         <div id="card-container-based-on-reviews" class="card-container">
 
         </div>
