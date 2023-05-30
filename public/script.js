@@ -203,7 +203,6 @@ class Movie {
 }
 
 
-
 // add stored movies from local storage
 function getStoredMovies() {
     const storedMovies = JSON.parse(localStorage.getItem("movies"));
@@ -223,15 +222,33 @@ addMovieButton.addEventListener("click", (event) => {
 
     // get all the data from the form
     const name = document.querySelector("#add-movie-name").value;
+    
+    // get image from global variable (set in image upload function)
     const image = currentlyUploadedImage;
+
+    // get array values from multi-select fields
     const directors = multiSelectFields["add-movie-directed-by"].getValues();
-    const releaseDate = document.querySelector("#add-movie-release-date").value;
-    const duration = document.querySelector("#add-movie-duration").value;
     const genres = multiSelectFields["add-movie-genres"].getValues();
-    const budget = document.querySelector("#add-movie-budget").value;
-    const boxOffice = document.querySelector("#add-movie-box-office").value;
     const countries = multiSelectFields["add-movie-countries"].getValues();
     const cast = multiSelectFields["add-movie-cast"].getValues();
+    
+    
+    function parseMoney(moneyString) {
+        // remove all non-numeric characters with regex 
+        // CITE: https://stackoverflow.com/questions/1862130/strip-all-non-numeric-characters-from-string-in-javascript
+        const parsedMoney = String(moneyString).replace(/\D/g, "");
+        
+        // convert to number
+        return Number(parsedMoney);
+    }
+    
+    // parse money values
+    const budget = parseMoney(document.querySelector("#add-movie-budget").value);
+    const boxOffice = parseMoney(document.querySelector("#add-movie-box-office").value);
+    
+    // get other values
+    const releaseDate = document.querySelector("#add-movie-release-date").value;
+    const duration = document.querySelector("#add-movie-duration").value;
     const colour = document.querySelector("#add-movie-colour").value;
     const synopsis = document.querySelector("#add-movie-synopsis").value;
 
@@ -264,6 +281,77 @@ function addMovie(movie) {
     localStorage.setItem("movies", JSON.stringify(movies));
 }
 
+function setMovieDetails(movie){
+
+    // set title
+    movieDetailsPage.querySelector("#movie-details-title").textContent = movie.name;
+
+    // set image source if available
+    if (movie.image){
+        movieDetailsPage.querySelector("#movie-details-poster").src = movie.image;
+    }
+
+    // set subheading year and genres
+    movieDetailsPage.querySelector("#movie-details-year").textContent = movie.releaseDate.split("-")[0];
+    movieDetailsPage.querySelector("#movie-details-genre").textContent = movie.genres.join(" | ");
+    
+    // set synopsis
+    movieDetailsPage.querySelector("#movie-details-synopsis").textContent = movie.synopsis;
+
+    // set directors
+    movieDetailsPage.querySelector("#movie-details-directors").textContent = movie.directors.join(", ");
+
+    // set release date
+    // format release date as day month year
+    // CITE: https://stackoverflow.com/questions/3552461/how-do-i-format-a-date-in-javascript
+    const releaseDateFormatted = new Date(movie.releaseDate).toLocaleDateString("en-GB", {day: "numeric", month: "long", year: "numeric"});
+    movieDetailsPage.querySelector("#movie-details-release-date").textContent = releaseDateFormatted;
+
+    // set runtime
+    // convert minutes to hours and minutes
+    const durationFormatted = `${Math.floor(movie.duration / 60)}h ${movie.duration % 60}m`;
+    movieDetailsPage.querySelector("#movie-details-runtime").textContent = durationFormatted;
+
+    // set budget
+    // format end with millions or billions
+    const formattedBudget = formatMoney(movie.budget);
+    movieDetailsPage.querySelector("#movie-details-budget").textContent = formattedBudget;
+
+    // set box office
+    // format end with millions or billions
+    const formattedBoxOffice = formatMoney(movie.boxOffice);
+    movieDetailsPage.querySelector("#movie-details-box-office").textContent = formattedBoxOffice;
+
+    // set countries
+    movieDetailsPage.querySelector("#movie-details-country").textContent = movie.countries.join(", ");
+
+    // set list of cast
+    const castList = movieDetailsPage.querySelector("#movie-details-cast-list");
+    movie.cast.forEach((actor) => {
+        const actorElement = document.createElement("li");
+        actorElement.textContent = actor;
+        castList.append(actorElement);
+    });
+
+    function formatMoney(value) {
+        let budgetFormatted = value;
+        // if value is greater than a millon
+        if (value > 1000000){
+            // format end with millions or billions when over 1 billion
+            budgetFormatted = value / 1000000 > 1000 ? `${value / 1000000000} billion` : `${value / 1000000} million`;
+        }
+
+        // add commas to separate thousands using regex
+        // CITE: https://stackoverflow.com/questions/2901102/how-to-format-a-number-with-commas-as-thousands-separators
+        budgetFormatted = budgetFormatted.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+
+        return budgetFormatted;
+    }
+}
+
+
+
+
 // add movie cards
 const movieCardContainer = document.querySelector("#card-container-based-on-reviews");
 
@@ -271,34 +359,51 @@ function addMovieCard(movie, parentElement) {
     const container = document.createElement("div");
     container.classList.add("card");
 
-    // movie title
+    // backdrop container
+    const backdropContainer = document.createElement("div");
+    backdropContainer.classList.add("card-backdrop");
+    
+    // card info container
     const cardInfo = document.createElement("div");
     cardInfo.classList.add("card-info");
-
+    backdropContainer.append(cardInfo);
+    
     // card info heading
     const heading = document.createElement("h2");
     heading.textContent = movie.name;
+    heading.classList.add("card-heading");
     cardInfo.append(heading);
-
+    
     // footer
     const footer = document.createElement("div");
     footer.classList.add("card-footer");
     cardInfo.append(footer);
-
+    
     // card info year
     const year = document.createElement("p");
     year.classList.add("card-year");
     // split release date by "-" and get the first element (year)
     year.textContent = movie.releaseDate.split("-")[0];
     footer.append(year);
-
+    
     // card info genres
     const genres = document.createElement("p");
     genres.classList.add("card-genres");
     genres.textContent = movie.genres.join(" | ");
     footer.append(genres);
+    
+    // set background image if available
+    if (movie.image){
+        container.style.backgroundImage = `url(${movie.image})`;
+    }
+    
+    container.append(backdropContainer);
 
-    container.append(cardInfo);
+    // callback function for when the card is clicked
+    container.addEventListener("click", (event) => {
+        openPage(movieDetailsPage);
+        setMovieDetails(movie)
+    });
 
     parentElement.append(container);
 }
@@ -394,14 +499,18 @@ posterImageDropOffElem.addEventListener("drop", (event) => {
         // set poster image background to image
         const reader = new FileReader();
         reader.onload = (event) => {
+            
+            // base64 encoded image
+            const base64Image = event.target.result;
+            
             // set background
-            posterImageDropOffElem.style.backgroundImage = `url(${event.target.result})`;
+            posterImageDropOffElem.style.backgroundImage = `url(${base64Image})`;
+            
+            // updated currently uploaded image
+            currentlyUploadedImage = base64Image;
 
             // add uploaded class to poster elem
             posterImageDropOffElem.classList.add("uploaded");
-
-            // updated currently uploaded image
-            currentlyUploadedImage = image;
         };
         // read image as a data url
         reader.readAsDataURL(image);

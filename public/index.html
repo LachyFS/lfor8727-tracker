@@ -43,8 +43,8 @@
     <section id="movieDetailsPage" class="hide">
         <header>
             <div class="movie-title-container">
-                <h1>Movie Title</h1>
-                <p>Year, Genre</p>
+                <h1 id="movie-details-title">Movie Title</h1>
+                <p><strong id="movie-details-year">Year</strong> | <span id="movie-details-genre">Genre</span></p>
             </div>
             <!-- could just be a img tag but nesting inside a button has better semantics -->
             <button id="moviePageExitButton" class="exit-button">
@@ -53,12 +53,12 @@
         </header>
 
         <div class="movie-page-container">
-            <img id="detailsPoster" src="images/poster_na.jpg">
+            <img id="movie-details-poster" src="images/poster_na.jpg">
             <div class="movie-information">
                 <div class="details-container">
                     <div class="details">
                         <h2>Synopsis</h2>
-                        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Labore, est molestias. Voluptatum
+                        <p id="movie-details-synopsis">Lorem ipsum dolor sit amet consectetur adipisicing elit. Labore, est molestias. Voluptatum
                             dolorem, dolor
                             consequatur sequi doloremque ex nobis incidunt ut placeat eveniet quasi, quisquam reiciendis
                             vero, quia
@@ -66,22 +66,18 @@
                     </div>
                     <div class="details">
                         <h2>Details</h2>
-                        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Labore, est molestias. Voluptatum
-                            dolorem, dolor
-                            consequatur sequi doloremque ex nobis incidunt ut placeat eveniet quasi, quisquam reiciendis
-                            vero, quia
-                            corporis repudiandae.</p>
+                        <p>
+                            <strong>Directed By: </strong><span id="movie-details-directors"></span><br>
+                            <strong>Released: </strong><span id="movie-details-release-date"></span><br>
+                            <strong>Runtime: </strong><span id="movie-details-runtime"></span><br>
+                            <strong>Budget: </strong><span id="movie-details-budget"></span><br>
+                            <strong>Box Office: </strong><span id="movie-details-box-office"></span><br>
+                            <strong>Countries: </strong><span id="movie-details-country"></span><br>
+                        </p>
                     </div>
                     <div class="details">
                         <h2>Cast</h2>
-                        <ul>
-                            <li>Lorem Ipsum</li>
-                            <li>Lorem Ipsum</li>
-                            <li>Lorem Ipsum</li>
-                            <li>Lorem Ipsum</li>
-                            <li>Lorem Ipsum</li>
-                            <li>Lorem Ipsum</li>
-                            <li>Lorem Ipsum</li>
+                        <ul id="movie-details-cast-list">
                         </ul>
                     </div>
                 </div>

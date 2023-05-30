@@ -31,9 +31,11 @@
 
 ## Deployment Procedures
 ### Install Dependencies
+Use node package manager to install dependencies in the project root directory.
 > `npm install`
 
 ### Run Development Server
+Run a local development server with hot reloading.
 > `npm run dev`
 
 ### Build Production Files
