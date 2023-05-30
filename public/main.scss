@@ -12,6 +12,8 @@ $input-font-size: 16px;
 $input-hover-col: #161616;
 $field-height: 2em;
 
+$error-color: #FF5959;
+
 // global fonts
 $body-font-family: 'Inter', Arial, Helvetica, sans-serif;
 
@@ -23,7 +25,7 @@ $body-font-family: 'Inter', Arial, Helvetica, sans-serif;
 body {
     font-family: $body-font-family;
     margin: 0;
-    background: linear-gradient(0, #161616 0%, #1e1e1e 68.75%);
+    background: linear-gradient(0, #050505 0%, #111111 68.75%);
     background-repeat: no-repeat;
     background-attachment: fixed;
     height: 100%;
@@ -140,12 +142,11 @@ section {
     $scale-factor: 1.1;
     $default-color: rgb(186, 186, 186);
 
-    // height: 20px + $card-height * $scale-factor;
+    height: 20px + $card-height * $scale-factor;
     margin: 2em 0em 4em 0.25em;
-    overflow: auto;
-    overflow-y: hidden; // disable vertical scroll
     width: 100%;
     display: flex;
+    overflow-y: hidden;
 
     .card {
         width: $card-width;
@@ -247,6 +248,10 @@ section {
         display: flex;
         padding: 1em;
 
+        .movie-title-container{
+            width: 100%;
+        }
+
         h1 {
             font-size: 3em;
         }
@@ -294,6 +299,11 @@ section {
     h1 {
         margin: 0;
     }
+}
+
+#moviePageExitButton{
+    margin-left: auto;
+    margin-right: 0;
 }
 
 .section-light {
@@ -464,6 +474,14 @@ input[type=date] {
     margin: 0 0 2em 0;
 }
 
+.input-stars{
+    display: flex;
+
+    .input-star{
+        cursor: pointer;
+    }
+}
+
 
 .input-multi {
     display: flex;
@@ -551,6 +569,26 @@ input[type=date] {
     margin: 0 0.5em 0.5em auto; // align to the right
 }
 
+#movie-details-watchlist{
+
+}
+
+#movie-details-edit
+{
+    border: #FF5959 2px solid;
+}
+
+.button-icon{
+    cursor: pointer;
+    box-sizing: border-box;
+    background-color: transparent;
+    border: 2px solid white;
+    border-radius: $border-rad;
+    width: 5em;
+    height: 5em;
+    margin-left: 1.5em;
+}
+
 // top search bar
 #search-films-input {
     background-color: white;
@@ -565,7 +603,6 @@ label {
     font-size: 16px;
     font-weight: bold;
     color: $main-text-col;
-    // margin: 0.5em;
     margin: 0;
     padding: 0;
     box-sizing: border-box;

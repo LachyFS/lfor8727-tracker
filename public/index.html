@@ -43,13 +43,18 @@
     <section id="movie-details-page" class="hide">
         <header>
             <div class="movie-title-container">
-                <h1 id="movie-details-title">Movie Title</h1>
+                <div class="flex-grid">
+                    <h1 id="movie-details-title">Movie Title</h1>
+                    <button id="movie-details-watchlist" class="button-icon"><img
+                            src="vectors/watch-icon-inactive.svg" /></button>
+                    <button id="movie-details-edit" class="button-icon"><img src="vectors/trash-icon.svg" /></button>
+                    <!-- could just be a img tag but nesting inside a button has better semantics -->
+                    <button id="moviePageExitButton" class="exit-button">
+                        <img src="vectors/cross.svg">
+                    </button>
+                </div>
                 <p><strong id="movie-details-year">Year</strong> | <span id="movie-details-genre">Genre</span></p>
             </div>
-            <!-- could just be a img tag but nesting inside a button has better semantics -->
-            <button id="moviePageExitButton" class="exit-button">
-                <img src="vectors/cross.svg">
-            </button>
         </header>
 
         <div class="movie-page-container">
@@ -58,7 +63,8 @@
                 <div class="details-container">
                     <div class="details">
                         <h2>Synopsis</h2>
-                        <p id="movie-details-synopsis">Lorem ipsum dolor sit amet consectetur adipisicing elit. Labore, est molestias. Voluptatum
+                        <p id="movie-details-synopsis">Lorem ipsum dolor sit amet consectetur adipisicing elit. Labore,
+                            est molestias. Voluptatum
                             dolorem, dolor
                             consequatur sequi doloremque ex nobis incidunt ut placeat eveniet quasi, quisquam reiciendis
                             vero, quia
@@ -87,7 +93,12 @@
                         <h2>Write Review</h2>
                     </label><br>
                     <textarea name="text-review" id="text-review"></textarea>
-                    <br>
+
+                    <div id="movie-review-star-ratings">
+                        
+                    </div>
+
+                    <!-- <br>
                     <input type="range" name="cinematography-stars" id="cinematography-stars" min="1" max="5" step="1">
                     <label for="cinematography-stars">Cinematography</label>
                     <br>
@@ -96,7 +107,7 @@
                     <br>
                     <input type="range" name="effects-stars" id="effects-stars" min="1" max="5" step="1">
                     <label for="effects-stars">Effects</label>
-                    <br>
+                    <br> -->
                     <label for="watch-date-stars">Watch Date</label>
                     <input type="date" name="watch-date-stars" id="watch-date-stars">
                     <br>
@@ -235,7 +246,11 @@
     </section>
 
     <section id="mainPage">
-        <h1 class="cards-title">Recommended</h1>
+        <h1 class="cards-title">Based On What You've Reviewed</h1>
+        <div id="card-container-based-on-reviews" class="card-container">
+
+        </div>
+        <h1 class="cards-title">Recent Reviews</h1>
         <div id="card-container-based-on-reviews" class="card-container">
 
         </div>
