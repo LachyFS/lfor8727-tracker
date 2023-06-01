@@ -45,7 +45,7 @@ h2 {
         display: flex;
         align-items: center;
         justify-content: space-evenly;
-        margin-right: 2em;
+        margin: 0 2em;
         z-index: 1; // make sure nav is 
 
         .nav-button {
@@ -391,7 +391,7 @@ h2 {
         height: 960px;
 
         margin: 0;
-        border: 3px dashed variables.$main-mid-color;
+        outline: 3px dashed variables.$main-mid-color;
         border-radius: 25px;
 
         background-color: variables.$alt-background-col;
@@ -417,7 +417,9 @@ h2 {
 
         // on drag over
         &.drag-over {
-            border: 3px dashed red;
+            // border: 3px dashed red;
+            outline: 3px solid variables.$main-mid-color;
+            background-color: variables.$input-hover-col;
         }
 
         &.uploaded {
@@ -639,7 +641,7 @@ label {
 
 // Responsive media queries
 // CITE: https://developers.google.com/search/blog/2012/04/responsive-design-harnessing-power-of
-@media screen and (min-width:480px) and (max-width:800px) {
+@media screen and (min-width:720px) and (max-width:1050px) {
     // Target landscape smartphones and narrow desktop
 
     // just hide nav anchors
@@ -649,7 +651,7 @@ label {
 
 }
 
-@media screen and (max-width:479px) {
+@media screen and (max-width:719px) {
     // Target portrait smartphones
 
     // reduce font size 
@@ -705,5 +707,4 @@ label {
     #add-movie-image-upload-area{
 
     }
-
 }

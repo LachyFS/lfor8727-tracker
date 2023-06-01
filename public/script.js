@@ -384,12 +384,10 @@ function setMovieDetails(movie) {
     movieDetailsPage.querySelector("#movie-details-runtime").textContent = durationFormatted;
 
     // set budget
-    // format end with millions or billions
     const formattedBudget = formatMoney(movie.budget);
     movieDetailsPage.querySelector("#movie-details-budget").textContent = formattedBudget;
 
     // set box office
-    // format end with millions or billions
     const formattedBoxOffice = formatMoney(movie.boxOffice);
     movieDetailsPage.querySelector("#movie-details-box-office").textContent = formattedBoxOffice;
 
@@ -432,8 +430,6 @@ function setMovieDetails(movie) {
         formTextArea.value = review.reviewText;
 
         // get values of rating elements 
-        console.log(review);
-        console.log(review.visualEffectsRating);
         visualEffectsStarsRating.setValue(review.visualEffectsStarsRating);
         narrativeStarsRating.setValue(review.narrativeStarsRating);
         cinematographyStarsRating.setValue(review.cinematographyStarsRating);
@@ -459,16 +455,18 @@ function setMovieDetails(movie) {
     }
 
     function formatMoney(value) {
-        let budgetFormatted = value;
-        // if value is greater than a millon
-        if (value > 1000000) {
-            // format end with millions or billions when over 1 billion
-            budgetFormatted = value / 1000000 > 1000 ? `${value / 1000000000} billion` : `${value / 1000000} million`;
+        if (value == null || value == 'N/A') {
+            return "N/A";
         }
 
-        // add commas to separate thousands using regex
-        // CITE: https://stackoverflow.com/questions/2901102/how-to-format-a-number-with-commas-as-thousands-separators
+        let budgetFormatted = value;
+
+        // // add commas to separate thousands using regex
+        // // CITE: https://stackoverflow.com/questions/2901102/how-to-format-a-number-with-commas-as-thousands-separators
         budgetFormatted = budgetFormatted.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+
+        // add dollar sign to start
+        budgetFormatted = "$" + budgetFormatted;
 
         return budgetFormatted;
     }
@@ -639,7 +637,7 @@ function renderAllCards() {
     renderCardContainer(homePageSuggestedMoviesCardContainer, 6, false, (movie) => !Review.getReviewFromStorage(movie));
 
     // recent reviews
-    renderCardContainer(homePageRecentReviewsCardContainer, 3, true);
+    renderCardContainer(homePageRecentReviewsCardContainer, 6, true);
 
     // all movies
     renderCardContainer(moviesPageCardContainer, Object.keys(movies).length, false);
@@ -651,6 +649,7 @@ function renderAllCards() {
 function renderCardsFilteredBySearchTerm(term) {
 
     // Levenshtein distance algorithm for term matching
+    // this returns the number of changes needed to make the strings match
     // CITE: https://www.tutorialspoint.com/levenshtein-distance-in-javascript
     const levenshteinDistance = (str1 = '', str2 = '') => {
         const track = Array(str2.length + 1).fill(null).map(() =>
@@ -674,6 +673,9 @@ function renderCardsFilteredBySearchTerm(term) {
         return track[str2.length][str1.length];
     };
 
+    // we filter by levenshtein distance because we want to allow for typos (to a certain extent)
+    // this approach is not perfect, ideally we would use a vector space model to compare the similarity of the terms (e.g. cosine similarity)
+    // which could take into account the context of the term (e.g. "batman" and "superman" are more similar than "batman" and "cat")
     const filterByLevDistance = (movie) => {
         const movieName = movie.name.toLowerCase();
         const movieGenres = movie.genres.map(genre => genre.toLowerCase());
@@ -768,6 +770,8 @@ function clearAllInputs() {
         element.value = "";
     });
 
+    // clear poster upload area
+    posterUpload.reset();
 }
 
 const posterUpload = new PosterUploadArea("add-movie-image-upload-area");

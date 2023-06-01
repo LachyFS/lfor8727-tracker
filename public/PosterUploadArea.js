@@ -76,6 +76,12 @@ export default class PosterUploadArea {
         });
     }
 
+    reset(){
+        this.posterImageDropOffElem.classList.remove("uploaded");
+        this.posterImageDropOffElem.style.backgroundImage = "";
+        this.loadedImage = "";
+    }
+
     browseImagePosterSelect() {
         const fileInput = document.createElement("input");
 
