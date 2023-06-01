@@ -36,7 +36,8 @@ const movieDetailsPage = document.querySelector('#movie-details-page');
 
 // add move page elements
 const movieAddPage = document.querySelector('#movie-add-page')
-const movieAddButton = document.querySelector('#add-movie-button')
+const movieAddPageButton = document.querySelector('#add-movie-page-button')
+const addMovieButton = document.querySelector("#add-movie-button");
 const movieAddPageExitButton = document.querySelector('#movie-add-page-exit-button');
 
 const currentlyOpenedPages = [homePage];
@@ -107,10 +108,9 @@ moviePageExitButton.addEventListener('click', (event) => {
     openPage(homePage);
 });
 
-movieAddButton.addEventListener('click', (event) => {
+movieAddPageButton.addEventListener('click', (event) => {
     // clear any input possibily left over before opening
     clearAllInputs();
-
     openPage(movieAddPage);
 });
 movieAddPageExitButton.addEventListener('click', (event) => {
@@ -209,7 +209,7 @@ reviewSubmitButton.addEventListener('click', (event) => {
     const review = getEnteredUserReview();
     Review.storeReview(currentlyOpenMovie, review);
     setMovieDetails(currentlyOpenMovie); // update movie details
-    renderCards();
+    renderAllCards();
 });
 
 
@@ -252,8 +252,6 @@ function getMovies() {
     return storedMovies;
 }
 
-// add movie button event listener
-const addMovieButton = document.querySelector("#add-movie-button");
 addMovieButton.addEventListener("click", (event) => {
     event.preventDefault();
 
@@ -304,6 +302,9 @@ addMovieButton.addEventListener("click", (event) => {
 
     addMovie(movie);
     addMovieCard(movie, homePageSuggestedMoviesCardContainer);
+
+    // go back to home page
+    openPage(homePage);
 });
 
 // check for review changes
@@ -602,39 +603,40 @@ function deleteMovie(movie) {
     openPage(homePage);
 
     // re-render cards to remove deleted movie
-    renderCards();
+    renderAllCards();
 }
 
-function renderCards() {
+function renderCardContainer(container, maxCards, showReview = false, filter = (movie) => true) {
+    container.innerHTML = "";
+    let i = 0;
+    for (var movie in movies) {
+        if (i >= maxCards) {
+            break;
+        }
 
-    function renderCardContainer(container, maxCards, showReview = false, filter = (movie) => true) {
-        container.innerHTML = "";
-        let i = 0;
-        for (var movie in movies) {
-            if (i >= maxCards) {
-                break;
-            }
-
-            // if showReview is true, only show movies with reviews
-            if (showReview){
-                if (!Review.getReviewFromStorage(movies[movie])) {
-                    continue;
-                }
-            }
-
-            // use filter, if false then skip this movie
-            if (!filter(movies[movie])) {
+        // if showReview is true, only show movies with reviews
+        if (showReview) {
+            if (!Review.getReviewFromStorage(movies[movie])) {
                 continue;
             }
-
-            // add movie card
-            addMovieCard(movies[movie], container, showReview);
-            i++;
         }
+
+        // use filter, if false then skip this movie
+        if (!filter(movies[movie])) {
+            continue;
+        }
+
+        // add movie card
+        addMovieCard(movies[movie], container, showReview);
+        i++;
     }
+}
+
+function renderAllCards() {
+
 
     // render suggested movies card container (12 max) which havent been reviewed already
-    renderCardContainer(homePageSuggestedMoviesCardContainer, 12, false, (movie) => !Review.getReviewFromStorage(movie));
+    renderCardContainer(homePageSuggestedMoviesCardContainer, 6, false, (movie) => !Review.getReviewFromStorage(movie));
 
     // recent reviews
     renderCardContainer(homePageRecentReviewsCardContainer, 3, true);
@@ -646,7 +648,87 @@ function renderCards() {
     renderCardContainer(reviewsPageCardContainer, Object.keys(movies).length, true);
 }
 
-renderCards();
+function renderCardsFilteredBySearchTerm(term) {
+
+    // Levenshtein distance algorithm for term matching
+    // CITE: https://www.tutorialspoint.com/levenshtein-distance-in-javascript
+    const levenshteinDistance = (str1 = '', str2 = '') => {
+        const track = Array(str2.length + 1).fill(null).map(() =>
+            Array(str1.length + 1).fill(null));
+        for (let i = 0; i <= str1.length; i += 1) {
+            track[0][i] = i;
+        }
+        for (let j = 0; j <= str2.length; j += 1) {
+            track[j][0] = j;
+        }
+        for (let j = 1; j <= str2.length; j += 1) {
+            for (let i = 1; i <= str1.length; i += 1) {
+                const indicator = str1[i - 1] === str2[j - 1] ? 0 : 1;
+                track[j][i] = Math.min(
+                    track[j][i - 1] + 1, // deletion
+                    track[j - 1][i] + 1, // insertion
+                    track[j - 1][i - 1] + indicator, // substitution
+                );
+            }
+        }
+        return track[str2.length][str1.length];
+    };
+
+    const filterByLevDistance = (movie) => {
+        const movieName = movie.name.toLowerCase();
+        const movieGenres = movie.genres.map(genre => genre.toLowerCase());
+
+        const termLower = term.toLowerCase();
+
+        // check if movie name contains term
+        if (movieName.includes(termLower)) {
+            return true;
+        }
+
+        // check if movie genres contain term
+        for (let i = 0; i < movieGenres.length; i++) {
+            if (movieGenres[i].includes(termLower)) {
+                return true;
+            }
+        }
+
+        // check if term is similar to movie name
+        if (levenshteinDistance(movieName, termLower) < 3) {
+            return true;
+        }
+
+        // check if term is similar to movie genres
+        for (let i = 0; i < movieGenres.length; i++) {
+            if (levenshteinDistance(movieGenres[i], termLower) < 3) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    // we don't change the movie suggestions container
+
+    // recent reviews
+    renderCardContainer(homePageRecentReviewsCardContainer, 3, true, filterByLevDistance);
+
+    // all movies
+    renderCardContainer(moviesPageCardContainer, Object.keys(movies).length, false, filterByLevDistance);
+
+    // all reviews
+    renderCardContainer(reviewsPageCardContainer, Object.keys(movies).length, true, filterByLevDistance);
+}
+
+// search filter functionality
+const searchInput = document.querySelector("#search-films-input");
+searchInput.addEventListener("input", (event) => {
+    const searchValue = event.target.value.toLowerCase();
+    console.log(searchValue);
+    renderCardsFilteredBySearchTerm(searchValue)
+});
+
+
+renderAllCards();
 
 
 const multiSelectFieldElements = document.querySelectorAll(".input-multi");
