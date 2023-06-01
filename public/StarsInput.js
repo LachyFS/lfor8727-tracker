@@ -4,7 +4,7 @@ import starEmpty from "./vectors/star-icon-inactive.svg";
 export default class StarsInput {
     constructor(id, parentElement, label) {
 
-        this.value = 0;
+        this.value = 1;
         this.changeCallbacks = [];
 
         this.container = document.createElement("div");
@@ -38,7 +38,7 @@ export default class StarsInput {
     }
 
     reset() {
-        this.value = 0;
+        this.value = 1;
         this.updateStars();
     }
 

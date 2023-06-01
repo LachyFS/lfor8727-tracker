@@ -25,7 +25,7 @@ h2 {
     margin: 0.25em;
 }
 
-#mainPage{
+#home-page{
     margin: 0;
 }
 
@@ -46,14 +46,20 @@ h2 {
         align-items: center;
         justify-content: space-evenly;
         margin-right: 2em;
-        // background-color: blue;
+        z-index: 1; // make sure nav is 
 
-        div {
-            // background-color: red;
+        .nav-button {
             display: flex;
             align-items: center;
             height: 100%;
             cursor: pointer;
+
+            // icon
+            img {
+                margin: 0;
+                height: 2.5em;
+                width: 2.5em;
+            }
 
             a {
                 margin-left: 0.5em;
@@ -64,6 +70,7 @@ h2 {
         }
     }
 }
+
 
 .selected {
     text-decoration: underline;
@@ -83,7 +90,7 @@ h2 {
     font-weight: bold;
 }
 
-#addMovieButton {
+#add-movie-button {
     height: 3.5em;
     width: 3.5em;
 
@@ -167,6 +174,7 @@ h2 {
     margin: 2em 0em 4em 0.25em;
     width: 100%;
     display: flex;
+    column-gap: 0.5em;
     overflow-y: hidden;
 
     .card {
@@ -187,11 +195,6 @@ h2 {
         transition: height 120ms, flex 120ms;
 
         cursor: pointer;
-
-        &:hover {
-            height: $card-height * $scale-factor;
-            flex: 0 0 $card-width * $scale-factor;
-        }
 
         .card-backdrop {
             @include browser.focus-effect();
@@ -250,7 +253,15 @@ h2 {
             }
         }
     }
+}
 
+.card-container-long{
+    @extend .card-container;
+    gap: 4em 1.5em;
+    overflow: auto;
+    flex-flow: wrap;
+    width: 100%;
+    height: 100%;
 }
 
 #movie-details-page {
@@ -332,7 +343,7 @@ h2 {
     }
 }
 
-#moviePageExitButton {
+#movie-page-exit-button {
     margin-left: auto;
     margin-right: 0;
 }
@@ -344,7 +355,7 @@ h2 {
     padding: 1em;
 }
 
-#movieAddPage {
+#movie-add-page {
     width: 95%;
     border-radius: variables.$border-rad;
 
@@ -426,7 +437,7 @@ h2 {
         width: 65%;
     }
 
-    #movieAddPageExitButton {
+    #movie-add-page-exit-button {
         width: 5%;
         margin: 0.5em;
     }
@@ -586,10 +597,6 @@ input[type=date] {
     margin: 0 0.5em 0.5em auto; // align to the right
 }
 
-#movie-details-watchlist {
-
-}
-
 #movie-details-edit {
     border: #FF5959 2px solid;
 }
@@ -697,7 +704,7 @@ label {
         }
     }
 
-    #movieAddPage{
+    #movie-add-page{
         > .flex-container{
 
         }

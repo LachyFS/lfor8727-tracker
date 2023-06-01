@@ -17,31 +17,30 @@
 
 <body>
 
-    <section id="mainPage">
-
-        <header id="main-header">
-            <div class="search-container">
-                <input id="search-films-input" class="search-bar" type="text" placeholder="Search Films...">
-                <button id="addMovieButton">
-                    <img src="vectors/plus.svg">
-                </button>
+    <header id="main-header">
+        <div class="search-container">
+            <input id="search-films-input" class="search-bar" type="text" placeholder="search films...">
+            <button id="add-movie-button">
+                <img src="vectors/plus.svg">
+            </button>
+        </div>
+        <nav>
+            <div id="home-button" class="nav-button selected">
+                <img src="vectors/home-icon-active.svg" />
+                <a>Home</a>
             </div>
-            <nav>
-                <div id="movies-button" class="nav-button selected">
-                    <img src="vectors/movies-icon-active.svg" />
-                    <a>Movies</a>
-                </div>
-                <div id="reviews-button" class="nav-button">
-                    <img src="vectors/star-icon-inactive.svg" />
-                    <a>Reviews</a>
-                </div>
-                <div id="watchlist-button" class="nav-button">
-                    <img src="vectors/watch-icon-inactive.svg" />
-                    <a>Watch List</a>
-                </div>
-            </nav>
-        </header>
+            <div id="reviews-button" class="nav-button">
+                <img src="vectors/star-icon-inactive.svg" />
+                <a>Reviews</a>
+            </div>
+            <div id="movies-button" class="nav-button">
+                <img src="vectors/movies-icon-inactive.svg" />
+                <a>Movies</a>
+            </div>
+        </nav>
+    </header>
 
+    <section id="home-page">
         <h1 class="cards-title">Based On What You've Reviewed</h1>
         <div id="card-container-based-on-reviews" class="card-container">
 
@@ -52,18 +51,26 @@
         </div>
     </section>
 
+    <section id="reviews-page" class="hide">
+        <h1 class="cards-title">Your Reviews</h1>
+        <div id="card-container-your-reviews" class="card-container-long">
+    </section>
+
+    <section id="movies-page" class="hide">
+        <h1 class="cards-title">All Movies</h1>
+        <div id="card-container-all-movies" class="card-container-long">
+    </section>
+
     <!-- toggleable movie details page where user can read about movie and write review -->
     <section id="movie-details-page" class="hide">
         <header>
             <div class="movie-title-container">
                 <div class="flex-container">
                     <h1 id="movie-details-title">Movie Title</h1>
-                    <button id="movie-details-watchlist-icon" class="button-icon"><img
-                            src="vectors/watch-icon-inactive.svg" /></button>
                     <button id="movie-details-remove-icon" class="button-icon"><img
                             src="vectors/trash-icon.svg" /></button>
                     <!-- could just be a img tag but nesting inside a button has better semantics -->
-                    <button id="moviePageExitButton" class="exit-button">
+                    <button id="movie-details-page-exit-button" class="exit-button">
                         <img src="vectors/cross.svg">
                     </button>
                 </div>
@@ -124,7 +131,7 @@
     </section>
 
     <!-- toggleable movie details page where user can read about movie and write review -->
-    <section id="movieAddPage" class="hide">
+    <section id="movie-add-page" class="hide">
 
         <div class="flex-container">
 
@@ -221,17 +228,6 @@
                             </div>
                         </td>
                     </tr>
-
-                    <tr>
-                        <td>
-                            <label for="add-movie-colour">Colour</label>
-                        </td>
-                        <td>
-                            <input type="text" name="add-movie-colour" id="add-movie-colour">
-                            <input type="color" name="add-movie-colour" id="add-movie-colour">
-                        </td>
-                    </tr>
-
                     <tr>
                         <td>
                             <label for="add-movie-synopsis">Synopsis</label>
@@ -245,11 +241,12 @@
                 <button id="add-movie-button">Add Movie</button>
             </form>
 
-            <button id="movieAddPageExitButton" class="exit-button">
+            <button id="movie-add-page-exit-button" class="exit-button">
                 <img src="vectors/cross.svg">
             </button>
         </div>
     </section>
+
 </body>
 <script src="script.js" type="module"></script>
 <!-- <script src="MultiFieldInput.js" type="module"></script> -->

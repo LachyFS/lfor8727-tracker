@@ -32,7 +32,12 @@ export default class Review {
     }
 
     static removeReview(movie){
-        localStorage.removeItem(STORAGE_KEY, movie.name);
+        // get reviews
+        const reviews = JSON.parse(localStorage.getItem(STORAGE_KEY));
+        // remove review of movie
+        delete reviews[movie.name];
+        // update storage
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(reviews));
     }
 
     static getAverageStarsRating(review){

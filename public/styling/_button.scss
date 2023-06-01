@@ -31,3 +31,15 @@
         color: variables.$error-color;
     }
 }
+
+@mixin button-disabled{
+    @include button-light;
+    background-color: variables.$mid-gray-col;
+    color: variables.$main-background-col;
+    
+    &:hover {
+        cursor: not-allowed;
+        background-color: transparent;
+        color: variables.$error-color;
+    }
+}

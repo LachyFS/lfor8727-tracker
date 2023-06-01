@@ -2277,28 +2277,6 @@ export const moviesDataset =
         ],
         "createDate": "2023-05-30T08:15:00.144Z"
     },
-    "N/A": {
-        "name": "N/A",
-        "boxOffice": "N/A",
-        "budget": "N/A",
-        "cast": [
-            "N/A"
-        ],
-        "countries": [
-            "N/A"
-        ],
-        "duration": "N/A",
-        "genres": [
-            "N/A"
-        ],
-        "image": "N/A",
-        "releaseDate": "N/A",
-        "synopsis": "N/A",
-        "directors": [
-            "N/A"
-        ],
-        "createDate": "2023-05-30T08:15:00.144Z"
-    },
     "Toy Story 3": {
         "name": "Toy Story 3",
         "boxOffice": "415004880",
@@ -5021,32 +4999,6 @@ export const moviesDataset =
         "synopsis": "Six short stories that explore the extremities of human behavior involving people in distress.",
         "directors": [
             "Dami\u00e1n Szifron"
-        ],
-        "createDate": "2023-05-30T08:15:00.144Z"
-    },
-    "Winter Sleep": {
-        "name": "Winter Sleep",
-        "boxOffice": "N/A",
-        "budget": "N/A",
-        "cast": [
-            "Haluk Bilginer",
-            "Melisa S\u00f6zen",
-            "Demet Akbag"
-        ],
-        "countries": [
-            "Turkey",
-            "France",
-            "Germany"
-        ],
-        "duration": "196",
-        "genres": [
-            "Drama"
-        ],
-        "image": "https://m.media-amazon.com/images/M/MV5BYzE2MjEwMTQtOTQ2Mi00ZWExLTkyMjUtNmJjMjBlYWFjZDdlXkEyXkFqcGdeQXVyMTI3ODAyMzE2._V1_SX300.jpg",
-        "releaseDate": "2014-06-13",
-        "synopsis": "A hotel owner and landlord in a remote Turkish village deals with conflicts within his family and a tenant behind on his rent.",
-        "directors": [
-            "Nuri Bilge Ceylan"
         ],
         "createDate": "2023-05-30T08:15:00.144Z"
     },

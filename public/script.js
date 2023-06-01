@@ -1,32 +1,45 @@
+// external packages
 import anime, { easings, stagger } from "animejs";
 import { MultiSelectField } from "./MultiFieldInput.js"
 
 // icons
 import moviesIconActive from "./vectors/movies-icon-active.svg";
 import moviesIconInactive from "./vectors/movies-icon-inactive.svg";
-
 import reviewsIconActive from "./vectors/star-icon-active.svg";
 import reviewsIconInactive from "./vectors/star-icon-inactive.svg";
+import homeIconActive from "./vectors/home-icon-active.svg";
+import homeIconInactive from "./vectors/home-icon-inactive.svg";
 
-import watchlistIconActive from "./vectors/watch-icon-active.svg";
-import watchlistIconInactive from "./vectors/watch-icon-inactive.svg";
-
+// js files
 import { moviesDataset } from "./data/movies.js";
 import PosterUploadArea from "./PosterUploadArea.js";
 import StarsInput from "./StarsInput.js";
 import Review from "./Review.js";
 import Modal from "./Modal.js";
 
+// home page elements
+const homePage = document.querySelector('#home-page');
+const moviePageExitButton = document.querySelector('#movie-details-page-exit-button');
+const homePageSuggestedMoviesCardContainer = document.querySelector("#card-container-based-on-reviews");
+const homePageRecentReviewsCardContainer = document.querySelector("#card-container-recent-reviews");
+
+// reviews page elements
+const reviewsPage = document.querySelector('#reviews-page');
+const reviewsPageCardContainer = document.querySelector('#card-container-your-reviews');
+
+// movies page elements
+const moviesPage = document.querySelector('#movies-page');
+const moviesPageCardContainer = document.querySelector('#card-container-all-movies');
+
+// movie details page elements
 const movieDetailsPage = document.querySelector('#movie-details-page');
 
-const movieAddPage = document.querySelector('#movieAddPage')
-const movieAddButton = document.querySelector('#addMovieButton')
-const movieAddPageExitButton = document.querySelector('#movieAddPageExitButton');
+// add move page elements
+const movieAddPage = document.querySelector('#movie-add-page')
+const movieAddButton = document.querySelector('#add-movie-button')
+const movieAddPageExitButton = document.querySelector('#movie-add-page-exit-button');
 
-const mainPage = document.querySelector('#mainPage');
-const moviePageExitButton = document.querySelector('#moviePageExitButton');
-
-const currentlyOpenedPages = [mainPage];
+const currentlyOpenedPages = [homePage];
 
 function hidePage(pageElement, duration) {
 
@@ -91,10 +104,9 @@ cards.forEach(card => {
 });
 
 moviePageExitButton.addEventListener('click', (event) => {
-    openPage(mainPage);
+    openPage(homePage);
 });
 
-// movie add
 movieAddButton.addEventListener('click', (event) => {
     // clear any input possibily left over before opening
     clearAllInputs();
@@ -102,22 +114,18 @@ movieAddButton.addEventListener('click', (event) => {
     openPage(movieAddPage);
 });
 movieAddPageExitButton.addEventListener('click', (event) => {
-    openPage(mainPage);
+    openPage(homePage);
 });
 
-const moviesButtonHandler = createNavButtonHandler("movies-button", moviesIconActive, moviesIconInactive);
+const HomeButtonHandler = createNavButtonHandler("home-button", homeIconActive, homeIconInactive);
 const reviewsButtonHandler = createNavButtonHandler("reviews-button", reviewsIconActive, reviewsIconInactive);
-const watchlistButtonHandler = createNavButtonHandler("watchlist-button", watchlistIconActive, watchlistIconInactive);
+const moviesButtonHandler = createNavButtonHandler("movies-button", moviesIconActive, moviesIconInactive);
 
 function createNavButtonHandler(buttonId, activeIcon, inactiveIcon) {
 
     const element = document.querySelector(`#${buttonId}`);
 
     const icon = element.querySelector("img");
-
-    element.addEventListener('click', (event) => {
-        deselectNavButtons();
-    });
 
     return {
         element: element,
@@ -133,42 +141,47 @@ function createNavButtonHandler(buttonId, activeIcon, inactiveIcon) {
 }
 
 function deselectNavButtons() {
-    moviesButtonHandler.setInactive();
+    HomeButtonHandler.setInactive();
     reviewsButtonHandler.setInactive();
-    watchlistButtonHandler.setInactive();
+    moviesButtonHandler.setInactive();
 }
 
-moviesButtonHandler.element.addEventListener('click', (event) => {
+HomeButtonHandler.element.addEventListener('click', (event) => {
     deselectNavButtons();
-    moviesButtonHandler.setActive();
+    HomeButtonHandler.setActive();
+    // go to home
+    openPage(homePage);
 });
 
 reviewsButtonHandler.element.addEventListener('click', (event) => {
     deselectNavButtons();
     reviewsButtonHandler.setActive();
+    // go to reviews
+    openPage(reviewsPage);
 });
 
-watchlistButtonHandler.element.addEventListener('click', (event) => {
+moviesButtonHandler.element.addEventListener('click', (event) => {
     deselectNavButtons();
-    watchlistButtonHandler.setActive();
+    moviesButtonHandler.setActive();
+    // go to movies
+    openPage(moviesPage);
 });
 
 // Escape key sends user back to main page
 document.addEventListener('keydown', (event) => {
     if (event.key == "Escape") {
-        openPage(mainPage)
+        openPage(homePage)
     }
 });
 
-// movie details functionality
+// movie details page functionality
 
-// construcct DOM elements for star rating inputs
+// init DOM elements for star rating inputs
 const starRatingContainer = document.querySelector("#movie-review-star-ratings");
 const cinematographyStarsRating = new StarsInput("movie-review-cinematography-stars", starRatingContainer, "Cinematography");
 const narrativeStarsRating = new StarsInput("movie-review-narrative-stars", starRatingContainer, "Narrative");
 const visualEffectsStarsRating = new StarsInput("movie-review-visual-effects-stars", starRatingContainer, "Visual Effects");
 
-// review submission
 function getEnteredUserReview() {
     const reviewText = document.querySelector("#review-text-review").value;
     const cinematographyScore = cinematographyStarsRating.value;
@@ -177,21 +190,14 @@ function getEnteredUserReview() {
     const watchDate = document.querySelector("#review-watch-date").value;
 
     // TODO: validate input
-
     return new Review(reviewText, cinematographyScore, narrativeScore, visualEffectsScore, watchDate);
 }
 
 // Delete and Watch later icons
 const deleteIcon = document.querySelector("#movie-details-remove-icon");
-const watchLaterIcon = document.querySelector("#movie-details-watchlist-icon");
 
 deleteIcon.addEventListener('click', (event) => {
     tryDeleteCurrentMovie(currentlyOpenMovie)
-});
-
-// TODO
-watchLaterIcon.addEventListener('click', (event) => {
-
 });
 
 let currentlyOpenMovie = {};
@@ -209,7 +215,7 @@ reviewSubmitButton.addEventListener('click', (event) => {
 
 class Movie {
 
-    constructor(name, image, directors, releaseDate, duration, genres, budget, boxOffice, countries, cast, colour, synopsis) {
+    constructor(name, image, directors, releaseDate, duration, genres, budget, boxOffice, countries, cast, synopsis) {
         this.name = name;
         this.image = image;
         this.directors = directors;
@@ -220,7 +226,6 @@ class Movie {
         this.boxOffice = boxOffice;
         this.countries = countries;
         this.cast = cast;
-        this.colour = colour;
         this.synopsis = synopsis;
         this.createDate = new Date();
     }
@@ -229,10 +234,6 @@ class Movie {
 // movies data structure
 const movies = getMovies();
 updateMoviesStorage();
-
-// watch list data structure
-const watchList = getWatchList();
-updateWatchlistStorage();
 
 function updateMoviesStorage() {
     localStorage.setItem("movies", JSON.stringify(movies));
@@ -249,23 +250,6 @@ function getMovies() {
     }
 
     return storedMovies;
-}
-
-function getWatchList() {
-    const storedWatchlist = JSON.parse(localStorage.getItem("watchlist"));
-    if (storedWatchlist == null) {
-        return [];
-    }
-    return storedWatchlist;
-}
-
-function updateWatchlistStorage() {
-    localStorage.setItem("watchlist", JSON.stringify(watchList));
-}
-
-function addToWatchList(movie) {
-    watchList.push(movie);
-    updateWatchlistStorage();
 }
 
 // add movie button event listener
@@ -301,7 +285,6 @@ addMovieButton.addEventListener("click", (event) => {
     // get other values
     const releaseDate = document.querySelector("#add-movie-release-date").value;
     const duration = document.querySelector("#add-movie-duration").value;
-    const colour = document.querySelector("#add-movie-colour").value;
     const synopsis = document.querySelector("#add-movie-synopsis").value;
 
     // create movie object
@@ -316,12 +299,11 @@ addMovieButton.addEventListener("click", (event) => {
         boxOffice,
         countries,
         cast,
-        colour,
         synopsis
     );
 
     addMovie(movie);
-    addMovieCard(movie, movieCardContainer);
+    addMovieCard(movie, homePageSuggestedMoviesCardContainer);
 });
 
 // check for review changes
@@ -441,13 +423,13 @@ function setMovieDetails(movie) {
     // if review exists for a movie
     const review = Review.getReviewFromStorage(movie);
 
-    
+
     if (review != null) {
         heading.textContent = "Your Review";
-        
+
         // set review text
         formTextArea.value = review.reviewText;
-        
+
         // get values of rating elements 
         console.log(review);
         console.log(review.visualEffectsRating);
@@ -492,8 +474,6 @@ function setMovieDetails(movie) {
 }
 
 // add movie cards
-
-const movieCardContainer = document.querySelector("#card-container-based-on-reviews");
 function addMovieCard(movie, parentElement, showReview = false) {
 
     // card container
@@ -512,25 +492,24 @@ function addMovieCard(movie, parentElement, showReview = false) {
     backdropContainer.append(cardInfo);
 
     if (showReview && Review.getReviewFromStorage(movie)) {
-    
+
         const review = Review.getReviewFromStorage(movie);
 
         const dateText = document.createElement("strong");
-        
-        
+
+
         const reviewText = document.createElement("p");
         // limit text to 100 chars max and add ellipsis (handles spaces with trim)
         const truncatedReviewText = review.reviewText.length > 100 ? review.reviewText.substring(0, 100).trim() + "..." : review.reviewText;
         reviewText.textContent = truncatedReviewText;
         reviewText.classList.add("card-review-text");
         cardInfo.append(reviewText);
-        
+
         // card banner
         const cardBanner = document.createElement("div");
         cardBanner.classList.add("card-banner");
         container.append(cardBanner);
 
-        
         // display average stars rating always
         const averageStarsRatingContainer = document.createElement("div");
         averageStarsRatingContainer.classList.add("card-average-stars-container");
@@ -542,7 +521,7 @@ function addMovieCard(movie, parentElement, showReview = false) {
         if (daysAgo == 0) dateText.textContent = "Today"; // if review was written today
         cardBanner.append(dateText);
 
-        
+
         // display average stars rating rounded to nearest integer (star)
         const averageStarRating = Math.round(Review.getAverageStarsRating(review));
 
@@ -620,7 +599,7 @@ function deleteMovie(movie) {
     updateMoviesStorage()
 
     // go back to main page because current movie no longer exists
-    openPage(mainPage);
+    openPage(homePage);
 
     // re-render cards to remove deleted movie
     renderCards();
@@ -628,35 +607,47 @@ function deleteMovie(movie) {
 
 function renderCards() {
 
-    // make sure container is clearewd
-    movieCardContainer.innerHTML = "";
+    function renderCardContainer(container, maxCards, showReview = false, filter = (movie) => true) {
+        container.innerHTML = "";
+        let i = 0;
+        for (var movie in movies) {
+            if (i >= maxCards) {
+                break;
+            }
 
-    const suggestionsCount = 8;
-    let i = 0;
-    for (var movie in movies) {
-        if (i >= suggestionsCount) {
-            break;
+            // if showReview is true, only show movies with reviews
+            if (showReview){
+                if (!Review.getReviewFromStorage(movies[movie])) {
+                    continue;
+                }
+            }
+
+            // use filter, if false then skip this movie
+            if (!filter(movies[movie])) {
+                continue;
+            }
+
+            // add movie card
+            addMovieCard(movies[movie], container, showReview);
+            i++;
         }
-        addMovieCard(movies[movie], movieCardContainer);
-        i++;
     }
 
-    const reviewCardContainer = document.querySelector("#card-container-recent-reviews");
-    reviewCardContainer.innerHTML = "";
+    // render suggested movies card container (12 max) which havent been reviewed already
+    renderCardContainer(homePageSuggestedMoviesCardContainer, 12, false, (movie) => !Review.getReviewFromStorage(movie));
 
-    // get all reviews
-    const reviews = Review.getReviews();
-    for (var movieName in reviews) {
-        const reviewObject = reviews[movieName];
+    // recent reviews
+    renderCardContainer(homePageRecentReviewsCardContainer, 3, true);
 
-        const movie = movies[movieName];
+    // all movies
+    renderCardContainer(moviesPageCardContainer, Object.keys(movies).length, false);
 
-        // add card with review
-        addMovieCard(movie, reviewCardContainer, true);
-    }
+    // all reviews
+    renderCardContainer(reviewsPageCardContainer, Object.keys(movies).length, true);
 }
 
 renderCards();
+
 
 const multiSelectFieldElements = document.querySelectorAll(".input-multi");
 
@@ -665,6 +656,7 @@ const multiSelectFields = {};
 multiSelectFieldElements.forEach((element) => {
     multiSelectFields[element.id] = new MultiSelectField(element);
 });
+
 
 function clearAllInputs() {
     // reset multi select fields
@@ -680,10 +672,6 @@ function clearAllInputs() {
         switch (element.type) {
             case "submit":
                 // do not clear submit buttons
-                break;
-            case "color":
-                // default colour as white
-                element.value = "#ffffff"
                 break;
             default:
                 // else just set as empty
