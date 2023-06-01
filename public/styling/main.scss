@@ -93,6 +93,7 @@ h2 {
 #add-movie-page-button {
     height: 3.5em;
     width: 3.5em;
+    min-width: 3.5em;
 
     margin: 1em auto;
     border-radius: 100px;
@@ -661,18 +662,12 @@ label {
     }
 
     #main-header {
-
         display: block !important; // !important overrides the display: flex
 
         // reformat top search area
         .search-container {
-            width: 50%;
+            width: 100%;
             margin: 0;
-
-            .search-bar {
-                width: 200px;
-                height: 40px;
-            }
         }
 
         // navigation
@@ -683,6 +678,7 @@ label {
             bottom: 0;
             height: 10%;
             width: 100%;
+            margin: 0;
             background-color: variables.$main-background-col;
 
             // hide navigation text, leave just icons
@@ -700,11 +696,29 @@ label {
 
     #movie-add-page{
         > .flex-container{
-
+            margin: 1em auto;
+            width: 90%;
+            flex-direction: column;
+            gap: 3em;
+            justify-content: center;
         }
     }
 
-    #add-movie-image-upload-area{
+    
+    .input-multi, input{
+        width: 60vw;
+    }
 
+    .big-text-input{
+        width: 85vw;
+    }
+
+    #add-movie-image-upload-area{
+        width: 100% !important;
+        height: 200px !important;
+
+        .add-movie-image-upload-instructions{
+            margin: 2em !important;
+        }
     }
 }
