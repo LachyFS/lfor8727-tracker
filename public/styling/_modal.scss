@@ -1,0 +1,64 @@
+// util
+@use "variables";
+@use "button";
+@use "browser";
+
+#modal-backdrop {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+
+    background-color: rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(4px);
+}
+
+.modal {
+    background-color: variables.$main-background-col;
+    color: variables.$main-text-col;
+    border-radius: variables.$border-rad;
+    padding: 1em;
+
+    // center on screen fixed
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+
+    h1,
+    p {
+        margin: 1em;
+        padding: 0;
+        text-align: center;
+    }
+
+    p {
+        margin-bottom: 2em;
+    }
+
+    // buttons
+    .modal-button-container {
+        display: flex;
+        justify-content: space-evenly;
+        margin-bottom: 1em;
+        gap: 1em;
+        width: 100%;
+        flex-wrap: wrap;
+
+        .modal-cancel-button {
+            @include button.button-light;
+        }
+
+        .modal-continue-button {
+            @include button.button-warn;
+        }
+    }
+
+
+}
+
+.modal-close {
+    display: none !important;
+}
+

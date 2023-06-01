@@ -1,0 +1,33 @@
+@use "variables";
+@use "browser";
+
+@mixin button-light {
+    display: block;
+    background-color: variables.$main-text-col;
+    color: variables.$main-background-col;
+    padding: 0.75em 3em;
+    font-weight: 700;
+    font-size: 1em;
+    border-radius: 10em;
+    cursor: pointer;
+    transition: color, background-color 100ms;
+    border: none;
+
+    &:hover {
+        @include browser.focus-effect;
+        background-color: variables.$alt-background-col;
+        color: variables.$main-text-col;
+    }
+}
+
+@mixin button-warn{
+    @include button-light;
+    background-color: variables.$error-color;
+    color: variables.$main-background-col;
+    
+    &:hover {
+        @include browser.focus-effect(variables.$error-color);
+        background-color: transparent;
+        color: variables.$error-color;
+    }
+}

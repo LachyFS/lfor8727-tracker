@@ -11,14 +11,14 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap"
         rel="stylesheet">
     <!-- styling -->
-    <link rel="stylesheet" href="main.scss">
+    <link rel="stylesheet" href="styling/main.scss">
     <title>Movie Review Tracker</title>
 </head>
 
 <body>
     <header>
         <div class="search-container">
-            <input id="search-films-input" type="text" placeholder="Search Films...">
+            <input id="search-films-input" class="search-bar" type="text" placeholder="Search Films...">
             <button id="addMovieButton">
                 <img src="vectors/plus.svg">
             </button>
@@ -43,11 +43,11 @@
     <section id="movie-details-page" class="hide">
         <header>
             <div class="movie-title-container">
-                <div class="flex-grid">
+                <div class="flex-container">
                     <h1 id="movie-details-title">Movie Title</h1>
-                    <button id="movie-details-watchlist" class="button-icon"><img
+                    <button id="movie-details-watchlist-icon" class="button-icon"><img
                             src="vectors/watch-icon-inactive.svg" /></button>
-                    <button id="movie-details-edit" class="button-icon"><img src="vectors/trash-icon.svg" /></button>
+                    <button id="movie-details-remove-icon" class="button-icon"><img src="vectors/trash-icon.svg" /></button>
                     <!-- could just be a img tag but nesting inside a button has better semantics -->
                     <button id="moviePageExitButton" class="exit-button">
                         <img src="vectors/cross.svg">
@@ -89,29 +89,19 @@
                 </div>
 
                 <form class="section-light">
-                    <label for="text-review">
+                    <label for="review-text-review">
                         <h2>Write Review</h2>
                     </label><br>
-                    <textarea name="text-review" id="text-review"></textarea>
+                    <textarea name="review-text-review" id="review-text-review"></textarea>
 
                     <div id="movie-review-star-ratings">
-                        
                     </div>
-
-                    <!-- <br>
-                    <input type="range" name="cinematography-stars" id="cinematography-stars" min="1" max="5" step="1">
-                    <label for="cinematography-stars">Cinematography</label>
-                    <br>
-                    <input type="range" name="story-stars" id="story-stars" min="1" max="5" step="1">
-                    <label for="story-stars">Story</label>
-                    <br>
-                    <input type="range" name="effects-stars" id="effects-stars" min="1" max="5" step="1">
-                    <label for="effects-stars">Effects</label>
-                    <br> -->
-                    <label for="watch-date-stars">Watch Date</label>
-                    <input type="date" name="watch-date-stars" id="watch-date-stars">
-                    <br>
+                    
+                    <label for="review-watch-date">Watch Date</label>
+                    
+                    <input type="date" name="review-watch-date" id="review-watch-date">
                     <button id="add-review-button">Add Review</button>
+
                 </form>
             </div>
         </div>
@@ -120,7 +110,7 @@
     <!-- toggleable movie details page where user can read about movie and write review -->
     <section id="movieAddPage" class="hide">
 
-        <div class="flex-grid">
+        <div class="flex-container">
 
             <div id="add-movie-image-upload-area" class="upload-image-area">
                 <div class="add-movie-image-upload-instructions">

@@ -1,0 +1,9 @@
+@mixin focus-effect($color: white) {
+    outline: 1px solid $color;
+}
+
+.disable-scroll {
+    margin: 0;
+    height: 100%;
+    overflow: hidden
+}

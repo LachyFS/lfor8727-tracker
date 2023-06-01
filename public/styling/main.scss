@@ -1,38 +1,23 @@
-// global color variables
-$main-text-col: rgb(237, 237, 237); // main background colour
-$main-mid-color: #CBCBCB;
-$main-background-col: #0A0A0A; // main background colour
-$alt-background-col: #101010; // lighter colour to main background colour to highlight information   
-$border-rad: 16px;
+// util
+@use "variables";
 
-$mid-gray-col: #2B2B2B;
-
-$input-border: 2px solid #2B2B2B;
-$input-font-size: 16px;
-$input-hover-col: #161616;
-$field-height: 2em;
-
-$error-color: #FF5959;
-
-// global fonts
-$body-font-family: 'Inter', Arial, Helvetica, sans-serif;
-
-// mixins
-@mixin focus-effect {
-    outline: 1px solid white;
-}
+// component rules
+@use "button";
+@use "modal";
+@use "browser";
 
 body {
-    font-family: $body-font-family;
+    font-family: variables.$body-font-family;
     margin: 0;
     background: linear-gradient(0, #050505 0%, #111111 68.75%);
     background-repeat: no-repeat;
     background-attachment: fixed;
     height: 100%;
+    width: 100%;
 }
 
 h1 {
-    color: $main-text-col;
+    color: variables.$main-text-col;
     margin-left: 1em;
 }
 
@@ -41,36 +26,39 @@ h2 {
 }
 
 body>header {
-    background-color: $main-background-col;
-    color: $main-text-col;
+    padding: 1em;
+    width: 100%;
+    box-sizing: border-box;
+    background-color: variables.$main-background-col;
+    color: variables.$main-text-col;
 
     // make header overlay everything with a high z index 
     z-index: 5;
-
     display: flex;
 
     nav {
+        width: 100%;
         display: flex;
         align-items: center;
-        gap: 5em;
+        justify-content: space-evenly;
         margin-right: 2em;
+        // background-color: blue;
 
         div {
+            // background-color: red;
             display: flex;
             align-items: center;
-            column-gap: 1em;
             height: 100%;
             cursor: pointer;
 
             a {
+                margin-left: 0.5em;
                 display: inline-block;
                 font-size: 1.5em;
                 font-weight: bold;
             }
         }
-
     }
-
 }
 
 .selected {
@@ -85,7 +73,7 @@ body>header {
     margin-right: auto;
 }
 
-#add-movie-image-upload-browse-link{
+#add-movie-image-upload-browse-link {
     cursor: pointer;
     text-decoration: underline;
     font-weight: bold;
@@ -111,7 +99,7 @@ body>header {
     }
 
     &:hover {
-        background-color: $mid-gray-col;
+        background-color: variables.$mid-gray-col;
     }
 }
 
@@ -127,13 +115,13 @@ section {
 }
 
 ::-webkit-scrollbar-track {
-    background-color: $main-background-col;
+    background-color: variables.$main-background-col;
 }
 
 ::-webkit-scrollbar-thumb {
-    background-color: $mid-gray-col;
+    background-color: variables.$mid-gray-col;
     outline: none;
-    border-radius: $border-rad;
+    border-radius: variables.$border-rad;
 }
 
 .card-container {
@@ -153,14 +141,14 @@ section {
         height: $card-height;
 
         box-sizing: border-box;
-        background-image: url("images/poster_na.jpg");
+        background-image: url("../images/poster_na.jpg");
         background-size: cover;
         background-repeat: none;
         height: $card-height;
-        border-radius: $border-rad;
+        border-radius: variables.$border-rad;
         margin: 0.25em;
         padding: 0;
-        color: $main-text-col;
+        color: variables.$main-text-col;
 
         flex: 0 0 $card-width;
         transition: height 120ms, flex 120ms;
@@ -173,10 +161,10 @@ section {
         }
 
         .card-backdrop {
-            @include focus-effect();
+            @include browser.focus-effect();
             background: rgba(0, 0, 0, 0.7);
             backdrop-filter: blur(4px);
-            border-radius: $border-rad;
+            border-radius: variables.$border-rad;
             margin: 0;
             padding: 0;
             width: 100%;
@@ -186,7 +174,7 @@ section {
 
             .card-info {
                 display: flex;
-                border-radius: $border-rad;
+                border-radius: variables.$border-rad;
                 flex-direction: column;
                 height: 100%;
                 margin-left: 1em;
@@ -229,12 +217,12 @@ section {
 
 #movie-details-page {
 
-    background-color: $main-background-col;
+    background-color: variables.$main-background-col;
 
     margin: 2em auto;
-    color: $main-text-col;
+    color: variables.$main-text-col;
     padding: 1em;
-    border-radius: $border-rad;
+    border-radius: variables.$border-rad;
 
     z-index: 2;
     opacity: 0;
@@ -248,7 +236,7 @@ section {
         display: flex;
         padding: 1em;
 
-        .movie-title-container{
+        .movie-title-container {
             width: 100%;
         }
 
@@ -267,7 +255,7 @@ section {
         #movie-details-poster {
             width: 30%;
             height: 100%;
-            border-radius: $border-rad;
+            border-radius: variables.$border-rad;
             object-fit: cover;
         }
 
@@ -284,7 +272,7 @@ section {
 
                 >p {
                     margin-right: 3em;
-                    border-left: 1px solid $main-text-col;
+                    border-left: 1px solid variables.$main-text-col;
                     padding-left: 1em;
                 }
 
@@ -301,23 +289,23 @@ section {
     }
 }
 
-#moviePageExitButton{
+#moviePageExitButton {
     margin-left: auto;
     margin-right: 0;
 }
 
 .section-light {
-    border-radius: $border-rad;
-    background-color: $alt-background-col;
+    border-radius: variables.$border-rad;
+    background-color: variables.$alt-background-col;
     margin-right: 3em;
     padding: 1em;
 }
 
 #movieAddPage {
     width: 95%;
-    border-radius: $border-rad;
+    border-radius: variables.$border-rad;
 
-    .flex-grid {
+    .flex-container {
         margin-top: 4em;
         column-gap: 2em;
         align-items: flex-start;
@@ -352,16 +340,16 @@ section {
         height: 960px;
 
         margin: 0;
-        border: 3px dashed $main-mid-color;
+        border: 3px dashed variables.$main-mid-color;
         border-radius: 25px;
 
-        background-color: $alt-background-col;
+        background-color: variables.$alt-background-col;
         background-repeat: no-repeat;
         background-position: center;
         background-size: cover;
 
         div {
-            color: $main-mid-color;
+            color: variables.$main-mid-color;
             text-align: center;
             display: block;
             margin: 50% auto;
@@ -403,13 +391,13 @@ section {
 
 textarea {
     box-sizing: border-box;
-    background-color: $main-background-col;
-    border-radius: $border-rad;
-    border: $input-border;
-    color: $main-text-col;
-    font-family: $body-font-family;
+    background-color: variables.$main-background-col;
+    border-radius: variables.$border-rad;
+    border: variables.$input-border;
+    color: variables.$main-text-col;
+    font-family: variables.$body-font-family;
     width: 100%;
-    font-size: $input-font-size;
+    font-size: variables.$input-font-size;
     padding: 1em;
 
     // reset
@@ -421,7 +409,7 @@ textarea {
 
 
 // generic grid class to align elements next to each other
-.flex-grid {
+.flex-container {
     display: flex;
     margin: 1em;
 }
@@ -435,23 +423,23 @@ br {
 }
 
 *:focus {
-    @include focus-effect;
+    @include browser.focus-effect;
 }
 
 .input-generic {
     display: inline-block;
     box-sizing: border-box;
-    background-color: $alt-background-col;
-    border: $input-border;
-    border-radius: $border-rad;
-    color: $main-text-col;
-    height: $field-height;
+    background-color: variables.$alt-background-col;
+    border: variables.$input-border;
+    border-radius: variables.$border-rad;
+    color: variables.$main-text-col;
+    height: variables.$field-height;
 
     margin: 0.5em 0;
     padding: 0.5em 2em;
 
-    font-family: $body-font-family;
-    font-size: $input-font-size;
+    font-family: variables.$body-font-family;
+    font-size: variables.$input-font-size;
 }
 
 input {
@@ -474,11 +462,17 @@ input[type=date] {
     margin: 0 0 2em 0;
 }
 
-.input-stars{
+.input-stars {
+    margin: 1em;
     display: flex;
+    align-items: center;
 
-    .input-star{
+    .input-star {
         cursor: pointer;
+    }
+
+    label {
+        margin-left: 1em;
     }
 }
 
@@ -495,31 +489,31 @@ input[type=date] {
         cursor: pointer;
         padding: 0.6em;
         margin: 0;
-        width: $field-height;
-        height: $field-height;
+        width: variables.$field-height;
+        height: variables.$field-height;
 
         &:hover {
-            background-color: $input-hover-col;
+            background-color: variables.$input-hover-col;
         }
     }
 
     div {
-        height: $field-height;
+        height: variables.$field-height;
         display: inline-flex;
         align-items: center;
         gap: 0em;
-        background-color: $alt-background-col;
+        background-color: variables.$alt-background-col;
 
-        border-radius: $border-rad;
-        border: $input-border;
+        border-radius: variables.$border-rad;
+        border: variables.$input-border;
 
         &:focus-within {
-            @include focus-effect;
-            background-color: $input-hover-col;
+            @include browser.focus-effect;
+            background-color: variables.$input-hover-col;
         }
 
         &:hover {
-            background-color: $input-hover-col;
+            background-color: variables.$input-hover-col;
         }
 
         input {
@@ -531,7 +525,7 @@ input[type=date] {
         }
 
         .remove-field-button {
-            color: $input-hover-col;
+            color: variables.$input-hover-col;
             width: 0.75em;
             margin: 0.5em;
             padding: 0.5em; // make it easier to click
@@ -540,69 +534,54 @@ input[type=date] {
     }
 }
 
-.button-light {
-    display: block;
-    background-color: $main-text-col;
-    color: $main-background-col;
-    padding: 0.75em 3em;
-    font-weight: 700;
-    font-size: 1em;
-    border-radius: 10em;
-    cursor: pointer;
-    transition: color, background-color 100ms;
-    border: none;
-
-    &:hover {
-        @include focus-effect;
-        background-color: $alt-background-col;
-        color: $main-text-col;
-    }
-}
-
-#add-movie-button{
-    @extend .button-light; // inherit from button-light
+#add-movie-button {
+    @include button.button-light; // inherit from button-light
     margin: 0 auto; // center
 }
 
-#add-review-button{
-    @extend .button-light; // inherit from button-light
+#add-review-button {
+    @include button.button-light; // inherit from button-light
     margin: 0 0.5em 0.5em auto; // align to the right
 }
 
-#movie-details-watchlist{
+#movie-details-watchlist {
 
 }
 
-#movie-details-edit
-{
+#movie-details-edit {
     border: #FF5959 2px solid;
 }
 
-.button-icon{
+.button-icon {
     cursor: pointer;
     box-sizing: border-box;
     background-color: transparent;
     border: 2px solid white;
-    border-radius: $border-rad;
+    border-radius: variables.$border-rad;
     width: 5em;
     height: 5em;
     margin-left: 1.5em;
 }
 
-// top search bar
-#search-films-input {
+#movie-details-remove-icon{
+    border-color: variables.$error-color;
+}
+
+// search bar input
+.search-bar {
+    background-color: red;
     background-color: white;
     border-radius: 5em;
     padding: 0.5em;
     height: 3em;
-    width: 25vw;
+    width: 400px;
     color: black;
 }
 
 label {
     font-size: 16px;
     font-weight: bold;
-    color: $main-text-col;
+    color: variables.$main-text-col;
     margin: 0;
     padding: 0;
     box-sizing: border-box;
@@ -616,4 +595,75 @@ label {
 
 .hide {
     display: none;
+}
+
+// Responsive media queries
+// CITE: https://developers.google.com/search/blog/2012/04/responsive-design-harnessing-power-of
+@media screen and (min-width:480px) and (max-width:800px) {
+    // Target landscape smartphones and narrow desktop
+
+    // just hide nav anchors
+    nav > div > a{
+        display: none !important;
+    }
+
+}
+
+@media screen and (max-width:479px) {
+    // Target portrait smartphones
+
+    // reduce font size 
+    h1 {
+        font-size: 1.4em;
+        margin: 1em;
+    }
+
+    body>header {
+
+        display: block !important; // !important overrides the display: flex
+
+        // reformat top search area
+        .search-container {
+            width: 50%;
+            margin: 0;
+
+            .search-bar {
+                width: 200px;
+                height: 40px;
+            }
+        }
+
+        // navigation
+        nav {
+            // move nav bar to the bottom
+            position: fixed;
+            left: 0;
+            bottom: 0;
+            height: 10%;
+            width: 100%;
+            background-color: variables.$main-background-col;
+
+            // hide navigation text, leave just icons
+            div {
+                a {
+                    display: none !important; // !important overrides the display: flex
+                }
+
+                img {
+                    width: 2.5em !important;
+                }
+            }
+        }
+    }
+
+    #movieAddPage{
+        > .flex-container{
+
+        }
+    }
+
+    #add-movie-image-upload-area{
+
+    }
+
 }

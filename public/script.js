@@ -14,6 +14,8 @@ import watchlistIconInactive from "./vectors/watch-icon-inactive.svg";
 import { moviesDataset } from "./data/movies.js";
 import PosterUploadArea from "./PosterUploadArea.js";
 import StarsInput from "./StarsInput.js";
+import Review from "./Review.js";
+import Modal from "./Modal.js";
 
 const movieDetailsPage = document.querySelector('#movie-details-page');
 
@@ -24,7 +26,7 @@ const movieAddPageExitButton = document.querySelector('#movieAddPageExitButton')
 const mainPage = document.querySelector('#mainPage');
 const moviePageExitButton = document.querySelector('#moviePageExitButton');
 
-const currentlyOpenedPages = [mainPage]
+const currentlyOpenedPages = [mainPage];
 
 function hidePage(pageElement, duration) {
 
@@ -103,7 +105,6 @@ movieAddPageExitButton.addEventListener('click', (event) => {
     openPage(mainPage);
 });
 
-
 const moviesButtonHandler = createNavButtonHandler("movies-button", moviesIconActive, moviesIconInactive);
 const reviewsButtonHandler = createNavButtonHandler("reviews-button", reviewsIconActive, reviewsIconInactive);
 const watchlistButtonHandler = createNavButtonHandler("watchlist-button", watchlistIconActive, watchlistIconInactive);
@@ -152,7 +153,6 @@ watchlistButtonHandler.element.addEventListener('click', (event) => {
     watchlistButtonHandler.setActive();
 });
 
-
 // Escape key sends user back to main page
 document.addEventListener('keydown', (event) => {
     if (event.key == "Escape") {
@@ -170,7 +170,6 @@ document.addEventListener('keydown', (event) => {
 // setInterval(test, 1000);
 
 
-
 movieGenres = ["Drama", "Comedy", "Action", "Fantasy", "Horror", "Romance", "Western", "Thriller"]
 
 function createDataList(id, optionValues) {
@@ -186,6 +185,57 @@ function createDataList(id, optionValues) {
 
 const genreDataList = createDataList("genresList", movieGenres);
 document.querySelector("#add-movie-genre").append(genreDataList);
+
+// movie details functionality
+
+// construcct DOM elements for star rating inputs
+const starRatingContainer = document.querySelector("#movie-review-star-ratings");
+const cinematographyStarsRating = new StarsInput("movie-review-cinematography-stars", starRatingContainer, "Cinematography");
+const narrativeStarsRating = new StarsInput("movie-review-narrative-stars", starRatingContainer, "Narrative");
+const visualEffectsStarsRating = new StarsInput("movie-review-visual-effects-stars", starRatingContainer, "Visual Effects");
+
+// review submission
+function getEnteredUserReview() {
+    const reviewText = document.querySelector("#review-text-review").value;
+    const cinematographyScore = cinematographyStarsRating.value;
+    const narrativeScore = narrativeStarsRating.value;
+    const visualEffectsScore = visualEffectsStarsRating.value;
+    const watchDate = document.querySelector("#review-watch-date").value;
+
+    // TODO: validate input
+
+    return new Review(reviewText, cinematographyScore, narrativeScore, visualEffectsScore, watchDate);
+}
+
+// Delete and Watch later icons
+const deleteIcon = document.querySelector("#movie-details-remove-icon");
+const watchLaterIcon = document.querySelector("#movie-details-watchlist-icon");
+
+deleteIcon.addEventListener('click', (event) => {
+    deleteMovie(currentlyOpenMovie)
+    openPage(mainPage);
+    renderCards();
+});
+
+// TODO
+watchLaterIcon.addEventListener('click', (event) => {
+
+});
+
+
+
+let currentlyOpenMovie = {};
+
+const reviewSubmitButton = document.querySelector("#add-review-button");
+
+reviewSubmitButton.addEventListener('click', (event) => {
+    event.preventDefault(); // prevent page refresh on form submission 
+    const review = getEnteredUserReview();
+    Review.storeReview(currentlyOpenMovie, review);
+    setMovieDetails(currentlyOpenMovie); // update movie details
+    // console.log(Review.getReviewFromStorage(currentlyOpenMovie));
+});
+
 
 class Movie {
 
@@ -206,25 +256,28 @@ class Movie {
     }
 }
 
-function populateMoviesStorage(){
-    // sets local storage of movies to an existing populated dataset
-    localStorage.setItem("movies", JSON.stringify(moviesDataset));
-    // returns the data that was just added
-    return moviesDataset;
+const movies = getMovies();
+updateMoviesStorage();
+
+function updateMoviesStorage() {
+    localStorage.setItem("movies", JSON.stringify(movies));
 }
 
 // add stored movies from local storage
-function getStoredMovies() {
+function getMovies() {
+
     const storedMovies = JSON.parse(localStorage.getItem("movies"));
     // if no movies are stored, return a populated dataset
     if (storedMovies == null) {
-        return populateMoviesStorage();
+        // return pre-existing movies dataset
+        return moviesDataset;
     }
-    // otherwise return the stored movies from local storage
+
     return storedMovies;
 }
 
-movies = getStoredMovies();
+
+const userReviews = {};
 
 // add movie button event listener
 const addMovieButton = document.querySelector("#add-movie-button");
@@ -288,10 +341,13 @@ function addMovie(movie) {
     movies[movie.name] = movie;
 
     // update local storage
-    localStorage.setItem("movies", JSON.stringify(movies));
+    updateMoviesStorage();
 }
 
 function setMovieDetails(movie) {
+
+    // set currently open movie
+    currentlyOpenMovie = movie;
 
     // set title
     movieDetailsPage.querySelector("#movie-details-title").textContent = movie.name;
@@ -350,6 +406,24 @@ function setMovieDetails(movie) {
             listElem.textContent = movie.cast[i];
         }
         castList.append(listElem);
+    }
+
+    // change review heading to 'your review'
+    const form = document.querySelector(".movie-page-container form");
+    const formTextArea = document.querySelector("#review-text-review");
+    const heading = form.querySelector("h2");
+
+    heading.textContent = "Write Review";
+    reviewSubmitButton.textContent = "Add Review";
+    formTextArea.value = "";
+
+    // if review exists for a movie
+    const review = Review.getReviewFromStorage(movie);
+
+    if (review != null) {
+        heading.textContent = "Your Review";
+        reviewSubmitButton.textContent = "Change Review";
+        formTextArea.value = review.reviewText;
     }
 
     function formatMoney(value) {
@@ -424,7 +498,28 @@ function addMovieCard(movie, parentElement) {
     parentElement.append(container);
 }
 
-function addAllMovieCards() {
+const deleteWarningModal = new Modal("Are you sure?",
+    "Deleting this movie will permanently remove it. This cannot be undone.", 
+    null,
+    null);
+
+function tryDeleteMove(movie){
+
+}
+
+function deleteMovie(movie){
+    delete movies[movie.name];
+
+    // update local storage
+    updateMoviesStorage()
+
+}
+
+function renderCards() {
+
+    // make sure container is clearewd
+    movieCardContainer.innerHTML = "";
+
     const suggestionsCount = 8;
     let i = 0;
     for (var movie in movies) {
@@ -436,7 +531,7 @@ function addAllMovieCards() {
     }
 }
 
-addAllMovieCards();
+renderCards();
 
 const multiSelectFieldElements = document.querySelectorAll(".input-multi");
 
@@ -463,7 +558,7 @@ function clearAllInputs() {
                 break;
             case "color":
                 // default colour as white
-                element.value = "#fff"
+                element.value = "#ffffff"
                 break;
             default:
                 // else just set as empty
@@ -477,13 +572,7 @@ function clearAllInputs() {
     allTextAreaElements.forEach(element => {
         element.value = "";
     });
+
 }
 
 const posterUpload = new PosterUploadArea("add-movie-image-upload-area");
-
-
-const starRatingContainer = document.querySelector("#movie-review-star-ratings");
-
-const cinematographyStarsRating = new StarsInput("movie-review-cinematography-stars", starRatingContainer, "Cinematography");
-const narrativeStarsRating = new StarsInput("movie-review-narrative-stars", starRatingContainer, "Narrative");
-const visualEffectsStarsRating = new StarsInput("movie-review-visual-effects-stars", starRatingContainer, "Visual Effects");

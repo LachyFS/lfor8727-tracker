@@ -29,7 +29,6 @@ export default class StarsInput{
         labelElem.htmlFor = id;
         labelElem.textContent = label;
         this.container.append(labelElem);
-
     }
 
     updateStars(){
