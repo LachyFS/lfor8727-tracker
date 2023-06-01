@@ -10,7 +10,7 @@
     width: 100%;
     height: 100%;
 
-    background-color: rgba(0, 0, 0, 0.5);
+    background-color: rgba(0, 0, 0, 0.8);
     backdrop-filter: blur(4px);
 }
 
@@ -19,6 +19,11 @@
     color: variables.$main-text-col;
     border-radius: variables.$border-rad;
     padding: 1em;
+
+
+    // sizing
+    width: 50%;
+    max-width: 500px;
 
     // center on screen fixed
     position: fixed;

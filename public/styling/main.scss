@@ -25,7 +25,11 @@ h2 {
     margin: 0.25em;
 }
 
-body>header {
+#mainPage{
+    margin: 0;
+}
+
+#main-header {
     padding: 1em;
     width: 100%;
     box-sizing: border-box;
@@ -103,11 +107,6 @@ body>header {
     }
 }
 
-section {
-    margin: 0 auto;
-    width: 95%;
-}
-
 // TODO: This likely doesnt work on firefox!!
 ::-webkit-scrollbar {
     width: 0.5em;
@@ -122,6 +121,40 @@ section {
     background-color: variables.$mid-gray-col;
     outline: none;
     border-radius: variables.$border-rad;
+}
+
+.card-banner{
+    $banner-height: 6em;
+    
+    display: block;
+    width: 100%;
+    background-color: rgba(0, 0, 0, 0.7);
+    backdrop-filter: blur(5px);
+    position: relative;
+    
+    height: $banner-height;
+    top: -$banner-height;
+
+    // just bottom
+    border-bottom-left-radius: variables.$border-rad;
+    border-bottom-right-radius: variables.$border-rad;
+    
+    strong{
+        display: block;
+        margin-left: 1em;
+    }
+
+    .card-average-stars-container{
+        display: flex;
+        justify-content: space-evenly;
+        display: flex;
+        margin: 0 auto;
+    }
+
+    .star{
+        width: 2em;
+        margin: 1em 0;
+    }
 }
 
 .card-container {
@@ -200,7 +233,12 @@ section {
                     &>*::selection {
                         background-color: transparent;
                     }
+                }
 
+                .card-review-text{
+                    width: 100%;
+                    display: block;
+                    word-wrap: break-word;
                 }
             }
 
@@ -217,9 +255,8 @@ section {
 
 #movie-details-page {
 
-    background-color: variables.$main-background-col;
-
     margin: 2em auto;
+    width: 95%;
     color: variables.$main-text-col;
     padding: 1em;
     border-radius: variables.$border-rad;
@@ -238,10 +275,15 @@ section {
 
         .movie-title-container {
             width: 100%;
+
+            #movie-sub-title{
+                margin-left: 1em;
+            }
         }
 
         h1 {
             font-size: 3em;
+            margin-left: 0;
         }
     }
 
@@ -250,6 +292,7 @@ section {
     }
 
     .movie-page-container {
+        margin: 1em;
         display: flex;
 
         #movie-details-poster {
@@ -397,16 +440,15 @@ textarea {
     color: variables.$main-text-col;
     font-family: variables.$body-font-family;
     width: 100%;
+    height: 10em;
     font-size: variables.$input-font-size;
     padding: 1em;
 
     // reset
     resize: none;
     box-shadow: none;
-    overflow: auto;
+    overflow-y: auto;
 }
-
-
 
 // generic grid class to align elements next to each other
 .flex-container {
@@ -569,7 +611,6 @@ input[type=date] {
 
 // search bar input
 .search-bar {
-    background-color: red;
     background-color: white;
     border-radius: 5em;
     padding: 0.5em;
@@ -618,7 +659,7 @@ label {
         margin: 1em;
     }
 
-    body>header {
+    #main-header {
 
         display: block !important; // !important overrides the display: flex
 

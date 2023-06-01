@@ -26,6 +26,19 @@ export default class Review {
         return reviews[movie.name];
     }
 
+    static getReviews(){
+        const reviews = JSON.parse(localStorage.getItem(STORAGE_KEY));
+        return reviews;
+    }
+
+    static removeReview(movie){
+        localStorage.removeItem(STORAGE_KEY, movie.name);
+    }
+
+    static getAverageStarsRating(review){
+        return (review.cinematographyStarsRating + review.narrativeStarsRating + review.visualEffectsStarsRating) / 3;
+    }
+
     constructor(reviewText, cinematographyStarsRating, narrativeStarsRating, visualEffectsStarsRating, watchDate) {
         // star reviews
         this.cinematographyStarsRating = cinematographyStarsRating;

@@ -16,28 +16,41 @@
 </head>
 
 <body>
-    <header>
-        <div class="search-container">
-            <input id="search-films-input" class="search-bar" type="text" placeholder="Search Films...">
-            <button id="addMovieButton">
-                <img src="vectors/plus.svg">
-            </button>
+
+    <section id="mainPage">
+
+        <header id="main-header">
+            <div class="search-container">
+                <input id="search-films-input" class="search-bar" type="text" placeholder="Search Films...">
+                <button id="addMovieButton">
+                    <img src="vectors/plus.svg">
+                </button>
+            </div>
+            <nav>
+                <div id="movies-button" class="nav-button selected">
+                    <img src="vectors/movies-icon-active.svg" />
+                    <a>Movies</a>
+                </div>
+                <div id="reviews-button" class="nav-button">
+                    <img src="vectors/star-icon-inactive.svg" />
+                    <a>Reviews</a>
+                </div>
+                <div id="watchlist-button" class="nav-button">
+                    <img src="vectors/watch-icon-inactive.svg" />
+                    <a>Watch List</a>
+                </div>
+            </nav>
+        </header>
+
+        <h1 class="cards-title">Based On What You've Reviewed</h1>
+        <div id="card-container-based-on-reviews" class="card-container">
+
         </div>
-        <nav>
-            <div id="movies-button" class="nav-button selected">
-                <img src="vectors/movies-icon-active.svg" />
-                <a>Movies</a>
-            </div>
-            <div id="reviews-button" class="nav-button">
-                <img src="vectors/star-icon-inactive.svg" />
-                <a>Reviews</a>
-            </div>
-            <div id="watchlist-button" class="nav-button">
-                <img src="vectors/watch-icon-inactive.svg" />
-                <a>Watch List</a>
-            </div>
-        </nav>
-    </header>
+        <h1 class="cards-title">Recent Reviews</h1>
+        <div id="card-container-recent-reviews" class="card-container">
+
+        </div>
+    </section>
 
     <!-- toggleable movie details page where user can read about movie and write review -->
     <section id="movie-details-page" class="hide">
@@ -47,13 +60,15 @@
                     <h1 id="movie-details-title">Movie Title</h1>
                     <button id="movie-details-watchlist-icon" class="button-icon"><img
                             src="vectors/watch-icon-inactive.svg" /></button>
-                    <button id="movie-details-remove-icon" class="button-icon"><img src="vectors/trash-icon.svg" /></button>
+                    <button id="movie-details-remove-icon" class="button-icon"><img
+                            src="vectors/trash-icon.svg" /></button>
                     <!-- could just be a img tag but nesting inside a button has better semantics -->
                     <button id="moviePageExitButton" class="exit-button">
                         <img src="vectors/cross.svg">
                     </button>
                 </div>
-                <p><strong id="movie-details-year">Year</strong> | <span id="movie-details-genre">Genre</span></p>
+                <p id="movie-sub-title"><strong id="movie-details-year">Year</strong> | <span
+                        id="movie-details-genre">Genre</span></p>
             </div>
         </header>
 
@@ -92,13 +107,14 @@
                     <label for="review-text-review">
                         <h2>Write Review</h2>
                     </label><br>
-                    <textarea name="review-text-review" id="review-text-review"></textarea>
+                    <textarea name="review-text-review" id="review-text-review"
+                        placeholder="write your review here!"></textarea>
 
                     <div id="movie-review-star-ratings">
                     </div>
-                    
+
                     <label for="review-watch-date">Watch Date</label>
-                    
+
                     <input type="date" name="review-watch-date" id="review-watch-date">
                     <button id="add-review-button">Add Review</button>
 
@@ -172,7 +188,7 @@
                         </td>
                         <td>
                             <div class="input-multi" id="add-movie-genres">
-                                <input list="genresList" name="add-movie-genres" id="add-movie-genre">
+                                <input type="text" name="add-movie-genres" id="add-movie-genre">
                             </div>
                         </td>
                     </tr>
@@ -232,17 +248,6 @@
             <button id="movieAddPageExitButton" class="exit-button">
                 <img src="vectors/cross.svg">
             </button>
-        </div>
-    </section>
-
-    <section id="mainPage">
-        <h1 class="cards-title">Based On What You've Reviewed</h1>
-        <div id="card-container-based-on-reviews" class="card-container">
-
-        </div>
-        <h1 class="cards-title">Recent Reviews</h1>
-        <div id="card-container-based-on-reviews" class="card-container">
-
         </div>
     </section>
 </body>

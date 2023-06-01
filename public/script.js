@@ -79,8 +79,8 @@ let cards = document.querySelectorAll(".card");
 
 function openPage(pageElement) {
     if (!isPageOpen(pageElement)) {
-        hideAllPages(200);
-        showPage(pageElement, 200);
+        hideAllPages(120);
+        showPage(pageElement, 120);
     }
 }
 
@@ -160,32 +160,6 @@ document.addEventListener('keydown', (event) => {
     }
 });
 
-// nav bar buttons
-
-
-// TODO: remove debug function
-// function test() {
-//     console.log(openPages);
-// }
-// setInterval(test, 1000);
-
-
-movieGenres = ["Drama", "Comedy", "Action", "Fantasy", "Horror", "Romance", "Western", "Thriller"]
-
-function createDataList(id, optionValues) {
-    const dataList = document.createElement("datalist");
-    dataList.id = id;
-    optionValues.forEach((value) => {
-        const option = document.createElement("option");
-        option.value = value;
-        dataList.append(option);
-    });
-    return dataList;
-}
-
-const genreDataList = createDataList("genresList", movieGenres);
-document.querySelector("#add-movie-genre").append(genreDataList);
-
 // movie details functionality
 
 // construcct DOM elements for star rating inputs
@@ -212,17 +186,13 @@ const deleteIcon = document.querySelector("#movie-details-remove-icon");
 const watchLaterIcon = document.querySelector("#movie-details-watchlist-icon");
 
 deleteIcon.addEventListener('click', (event) => {
-    deleteMovie(currentlyOpenMovie)
-    openPage(mainPage);
-    renderCards();
+    tryDeleteCurrentMovie(currentlyOpenMovie)
 });
 
 // TODO
 watchLaterIcon.addEventListener('click', (event) => {
 
 });
-
-
 
 let currentlyOpenMovie = {};
 
@@ -233,7 +203,7 @@ reviewSubmitButton.addEventListener('click', (event) => {
     const review = getEnteredUserReview();
     Review.storeReview(currentlyOpenMovie, review);
     setMovieDetails(currentlyOpenMovie); // update movie details
-    // console.log(Review.getReviewFromStorage(currentlyOpenMovie));
+    renderCards();
 });
 
 
@@ -256,8 +226,13 @@ class Movie {
     }
 }
 
+// movies data structure
 const movies = getMovies();
 updateMoviesStorage();
+
+// watch list data structure
+const watchList = getWatchList();
+updateWatchlistStorage();
 
 function updateMoviesStorage() {
     localStorage.setItem("movies", JSON.stringify(movies));
@@ -276,8 +251,22 @@ function getMovies() {
     return storedMovies;
 }
 
+function getWatchList() {
+    const storedWatchlist = JSON.parse(localStorage.getItem("watchlist"));
+    if (storedWatchlist == null) {
+        return [];
+    }
+    return storedWatchlist;
+}
 
-const userReviews = {};
+function updateWatchlistStorage() {
+    localStorage.setItem("watchlist", JSON.stringify(watchList));
+}
+
+function addToWatchList(movie) {
+    watchList.push(movie);
+    updateWatchlistStorage();
+}
 
 // add movie button event listener
 const addMovieButton = document.querySelector("#add-movie-button");
@@ -332,9 +321,42 @@ addMovieButton.addEventListener("click", (event) => {
     );
 
     addMovie(movie);
-
     addMovieCard(movie, movieCardContainer);
 });
+
+// check for review changes
+const reviewTextArea = document.querySelector("#review-text-review");
+
+function handleReviewChange() {
+    // check if review exists wuth currently selected movie
+    if (Review.getReviewFromStorage(currentlyOpenMovie)) {
+        displayUpdateReviewButton();
+    }
+}
+
+// change event on text area
+reviewTextArea.addEventListener('input', (event) => {
+    handleReviewChange();
+});
+
+// change event on stars
+visualEffectsStarsRating.addOnChangeCallback(handleReviewChange);
+narrativeStarsRating.addOnChangeCallback(handleReviewChange);
+cinematographyStarsRating.addOnChangeCallback(handleReviewChange);
+
+// change event on date input
+const reviewFormDateInput = document.querySelector("#review-watch-date");
+reviewFormDateInput.addEventListener('change', (event) => {
+    handleReviewChange();
+});
+
+
+function displayUpdateReviewButton() {
+    reviewSubmitButton.style.display = "block"; // show submit button
+
+    // rename to 'update review'
+    reviewSubmitButton.textContent = "Update Review";
+}
 
 function addMovie(movie) {
     // add movie to movies object
@@ -410,20 +432,47 @@ function setMovieDetails(movie) {
 
     // change review heading to 'your review'
     const form = document.querySelector(".movie-page-container form");
-    const formTextArea = document.querySelector("#review-text-review");
+    const formTextArea = form.querySelector("#review-text-review");
     const heading = form.querySelector("h2");
 
     heading.textContent = "Write Review";
     reviewSubmitButton.textContent = "Add Review";
-    formTextArea.value = "";
 
     // if review exists for a movie
     const review = Review.getReviewFromStorage(movie);
 
+    
     if (review != null) {
         heading.textContent = "Your Review";
-        reviewSubmitButton.textContent = "Change Review";
+        
+        // set review text
         formTextArea.value = review.reviewText;
+        
+        // get values of rating elements 
+        console.log(review);
+        console.log(review.visualEffectsRating);
+        visualEffectsStarsRating.setValue(review.visualEffectsStarsRating);
+        narrativeStarsRating.setValue(review.narrativeStarsRating);
+        cinematographyStarsRating.setValue(review.cinematographyStarsRating);
+
+        // we want to hide the submit button
+        reviewSubmitButton.style.display = "none";
+    } else {
+        // else clear all form inputs because no review exists
+
+        // clear text area
+        formTextArea.value = "";
+
+        // reset date input by setting it to current date
+        reviewFormDateInput.value = new Date().toISOString().split("T")[0]; // set to today's date by default
+
+        // reset star ratings if they were changed before
+        visualEffectsStarsRating.reset();
+        narrativeStarsRating.reset();
+        cinematographyStarsRating.reset();
+
+        // make sure submit button is shown
+        reviewSubmitButton.style.display = "block";
     }
 
     function formatMoney(value) {
@@ -443,76 +492,138 @@ function setMovieDetails(movie) {
 }
 
 // add movie cards
-const movieCardContainer = document.querySelector("#card-container-based-on-reviews");
 
-function addMovieCard(movie, parentElement) {
+const movieCardContainer = document.querySelector("#card-container-based-on-reviews");
+function addMovieCard(movie, parentElement, showReview = false) {
+
+    // card container
     const container = document.createElement("div");
     container.classList.add("card");
+    parentElement.append(container);
 
     // backdrop container
     const backdropContainer = document.createElement("div");
     backdropContainer.classList.add("card-backdrop");
+    container.append(backdropContainer);
 
-    // card info container
+    // card image (displays on hover)
     const cardInfo = document.createElement("div");
     cardInfo.classList.add("card-info");
     backdropContainer.append(cardInfo);
 
-    // card info heading
-    const heading = document.createElement("h2");
-    heading.textContent = movie.name;
-    heading.classList.add("card-heading");
-    cardInfo.append(heading);
+    if (showReview && Review.getReviewFromStorage(movie)) {
+    
+        const review = Review.getReviewFromStorage(movie);
 
-    // footer
-    const footer = document.createElement("div");
-    footer.classList.add("card-footer");
-    cardInfo.append(footer);
+        const dateText = document.createElement("strong");
+        
+        
+        const reviewText = document.createElement("p");
+        // limit text to 100 chars max and add ellipsis (handles spaces with trim)
+        const truncatedReviewText = review.reviewText.length > 100 ? review.reviewText.substring(0, 100).trim() + "..." : review.reviewText;
+        reviewText.textContent = truncatedReviewText;
+        reviewText.classList.add("card-review-text");
+        cardInfo.append(reviewText);
+        
+        // card banner
+        const cardBanner = document.createElement("div");
+        cardBanner.classList.add("card-banner");
+        container.append(cardBanner);
 
-    // card info year
-    const year = document.createElement("p");
-    year.classList.add("card-year");
-    // split release date by "-" and get the first element (year)
-    year.textContent = movie.releaseDate.split("-")[0];
-    footer.append(year);
+        
+        // display average stars rating always
+        const averageStarsRatingContainer = document.createElement("div");
+        averageStarsRatingContainer.classList.add("card-average-stars-container");
+        cardBanner.append(averageStarsRatingContainer);
 
-    // card info genres
-    const genres = document.createElement("p");
-    genres.classList.add("card-genres");
-    genres.textContent = movie.genres.join(" | ");
-    footer.append(genres);
+        // display date review was written
+        const daysAgo = Math.floor((new Date() - new Date(review.watchDate)) / (1000 * 60 * 60 * 24));
+        dateText.textContent = `${daysAgo} days ago`; // if review was written x days ago
+        if (daysAgo == 0) dateText.textContent = "Today"; // if review was written today
+        cardBanner.append(dateText);
+
+        
+        // display average stars rating rounded to nearest integer (star)
+        const averageStarRating = Math.round(Review.getAverageStarsRating(review));
+
+        for (let i = 0; i < averageStarRating; i++) {
+            const star = document.createElement("img");
+            star.classList.add("star");
+            star.src = reviewsIconActive;
+            averageStarsRatingContainer.append(star);
+        }
+
+        for (let i = 0; i < 5 - averageStarRating; i++) {
+            const star = document.createElement("img");
+            star.classList.add("star");
+            star.src = reviewsIconInactive;
+            averageStarsRatingContainer.append(star);
+        }
+
+    } else {
+
+        // card info heading
+        const heading = document.createElement("h2");
+        heading.textContent = movie.name;
+        heading.classList.add("card-heading");
+        cardInfo.append(heading);
+
+        // footer
+        const footer = document.createElement("div");
+        footer.classList.add("card-footer");
+        cardInfo.append(footer);
+
+        // card info year
+        const year = document.createElement("p");
+        year.classList.add("card-year");
+        // split release date by "-" and get the first element (year)
+        year.textContent = movie.releaseDate.split("-")[0];
+        footer.append(year);
+
+        // card info genres
+        const genres = document.createElement("p");
+        genres.classList.add("card-genres");
+        genres.textContent = movie.genres.join(" | ");
+        footer.append(genres);
+    }
 
     // set background image if available
     if (movie.image) {
         container.style.backgroundImage = `url(${movie.image})`;
     }
 
-    container.append(backdropContainer);
-
     // callback function for when the card is clicked
     container.addEventListener("click", (event) => {
         openPage(movieDetailsPage);
         setMovieDetails(movie)
     });
-
-    parentElement.append(container);
 }
 
 const deleteWarningModal = new Modal("Are you sure?",
-    "Deleting this movie will permanently remove it. This cannot be undone.", 
-    null,
-    null);
+    "Deleting this movie will permanently remove it. This cannot be undone.",
+    () => { deleteMovie(currentlyOpenMovie) });
 
-function tryDeleteMove(movie){
-
+function tryDeleteCurrentMovie() {
+    // open modal
+    deleteWarningModal.open();
 }
 
-function deleteMovie(movie){
+function deleteMovie(movie) {
+
+    // remove movie from movies object
     delete movies[movie.name];
+
+    // remove related review
+    Review.removeReview(movie);
 
     // update local storage
     updateMoviesStorage()
 
+    // go back to main page because current movie no longer exists
+    openPage(mainPage);
+
+    // re-render cards to remove deleted movie
+    renderCards();
 }
 
 function renderCards() {
@@ -528,6 +639,20 @@ function renderCards() {
         }
         addMovieCard(movies[movie], movieCardContainer);
         i++;
+    }
+
+    const reviewCardContainer = document.querySelector("#card-container-recent-reviews");
+    reviewCardContainer.innerHTML = "";
+
+    // get all reviews
+    const reviews = Review.getReviews();
+    for (var movieName in reviews) {
+        const reviewObject = reviews[movieName];
+
+        const movie = movies[movieName];
+
+        // add card with review
+        addMovieCard(movie, reviewCardContainer, true);
     }
 }
 

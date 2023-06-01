@@ -5,7 +5,7 @@ export default class Modal {
     static createBackdrop = () => {
 
         const backdropElem = document.createElement("div");
-        
+
         // id instead of class because should be unique
         backdropElem.id = "modal-backdrop";
 
@@ -14,27 +14,26 @@ export default class Modal {
 
             document.querySelector("body").append(backdropElem);
         });
-        
+
         // we can still return the element because its a reference type
         // and will be appended when DOM content is loaded later
         return backdropElem;
     };
 
-    static disableScroll(){
+    static disableScroll() {
         document.querySelector("body").classList.add("disable-scroll");
     }
 
-    static enabledScroll(){
-        document.querySelector("body").classList.add("disable-scroll");
+    static enabledScroll() {
+        document.querySelector("body").classList.remove("disable-scroll");
     }
 
     static backdrop = this.createBackdrop();
 
-    constructor(titleText, messageText, continueCallback, cancelCallback) {
+    constructor(titleText, messageText, continueCallback) {
 
         // callbacks
         this.continueCallback = continueCallback;
-        this.cancelCallback = cancelCallback;
 
         // create modal container
         this.container = document.createElement("div");
@@ -73,8 +72,7 @@ export default class Modal {
         this.addListeners();
 
         // close modal by default
-        // this.close();
-        this.open();
+        this.close();
     }
 
     addListeners() {
@@ -84,7 +82,6 @@ export default class Modal {
             this.close();
             this.continueCallback();
         });
-
 
         // close modal events 
         // escape key
@@ -109,7 +106,7 @@ export default class Modal {
         Modal.disableScroll();
 
     }
-    
+
     close() {
         this.container.classList.add("modal-close");
         this.container.classList.remove("modal-open");
