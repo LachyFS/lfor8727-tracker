@@ -361,7 +361,8 @@ function setMovieDetails(movie) {
 
     // set image source if available
     if (movie.image) {
-        movieDetailsPage.querySelector("#movie-details-poster").src = movie.image;
+        const posterElem = movieDetailsPage.querySelector("#movie-details-poster");
+        posterElem.src = movie.image;
     }
 
     // set subheading year and genres
