@@ -10,7 +10,7 @@
 
 ## Deployment Procedures
 
-## Install Application Dependencies
+### Install Application Dependencies
 Install [NodeJS](https://nodejs.org/en/) and ensure the `node` and `npm` commands are available in your command line interface. 
 
 ### Install Dependencies
@@ -51,7 +51,12 @@ the production server will serve the build files in the `dist` directory using E
 
 ## Future Improvements
 
+## Browser Compatibility
+
 ### Search
+
+### Server Side Code
+Storing the movie data on a web server could greaterly improve the performance of the web application. Complex search queries could be completed server side sent to the user a REST API. Client could send a POST request and recieve a JSON response containing search results. This means the user's browser would not need to parse an entire JSON file containing all movie data.
 
 ### Aria Labels
 
