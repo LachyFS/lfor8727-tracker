@@ -59,7 +59,7 @@ Storing the movie data on a web server could greaterly improve the performance o
 ### ARIA Labels
 Using [ARIA](https://developer.mozilla.org/en-US/docs/Web/Accessibility/ARIA) labels on on-standard input elements (e.g. the custom multi field select input which is contained as a div) would improve accessibility.
 
-### Using Custom Elemnts
+### Using Custom Elements
 Taking advantage of [custom web components](https://developer.mozilla.org/en-US/docs/Web/API/Web_components/Using_custom_elements) could make my JavaScript easier to maintain and modular. I could've inherited from the base HTML element class and add functionality to it that way.
 
 ## Lessons Learned
