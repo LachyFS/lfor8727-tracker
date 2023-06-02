@@ -30,11 +30,8 @@ the production server will serve the build files in the `dist` directory using E
 > `node server.js`
 
 ## Design Iterations
-Initial mockups before iterations:
-![Desktop Mockup](./docs/mockup_home.jpg)
-![Mobile Mockup](./docs/mockup_home_mobile.jpg)
-
 Changes since initial mockups.
+![Desktop Mockup](./docs/mockup_home.jpg)
 
 ### Removed Watchlist Page
 I determined that considering the brief of the task, adding a watch list page was unnecessary. 
