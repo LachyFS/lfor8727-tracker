@@ -301,7 +301,9 @@ addMovieButton.addEventListener("click", (event) => {
     );
 
     addMovie(movie);
-    addMovieCard(movie, homePageSuggestedMoviesCardContainer);
+
+    // render all cards after adding movie
+    renderAllCards();
 
     // go back to home page
     openPage(homePage);
@@ -725,7 +727,6 @@ function renderCardsFilteredBySearchTerm(term) {
 const searchInput = document.querySelector("#search-films-input");
 searchInput.addEventListener("input", (event) => {
     const searchValue = event.target.value.toLowerCase();
-    console.log(searchValue);
     renderCardsFilteredBySearchTerm(searchValue)
 });
 
@@ -740,7 +741,6 @@ const multiSelectFields = {};
 multiSelectFieldElements.forEach((element) => {
     multiSelectFields[element.id] = new MultiSelectField(element);
 });
-
 
 function clearAllInputs() {
     // reset multi select fields
